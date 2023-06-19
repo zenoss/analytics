@@ -7,7 +7,6 @@
 #
 ##############################################################################
 
-import logging
 import os
 import re
 import sys
@@ -15,7 +14,7 @@ import sys
 import transaction
 
 from Products.ZenModel.Report import Report
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.ZCmdBase import ZCmdBase
 
 

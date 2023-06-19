@@ -22,7 +22,7 @@ import threading
 from inotify_simple import INotify, flags as Flags
 from zope.component import getUtility
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 from .config import getConfig
 from .interfaces import IJobStore

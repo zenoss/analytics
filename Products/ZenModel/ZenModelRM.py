@@ -28,7 +28,8 @@ from OFS.interfaces import IItem
 from ZenModelBase import ZenModelBase, iscustprop
 from ZenPacker import ZenPacker
 from Products.ZenWidgets import messaging
-from Products.ZenUtils.Utils import getSubObjects, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import getSubObjects
 from Products.ZenRelations.ImportRM import ImportRM
 from Products.ZenRelations.RelationshipManager import RelationshipManager
 from Products.ZenModel.ZenossSecurity import (

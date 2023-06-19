@@ -21,7 +21,7 @@ from zope.component import getGlobalSiteManager
 
 from Products import Zuul
 from Products.ZenUtils.guid.interfaces import IGUIDManager
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 class FileUpload(BrowserView):

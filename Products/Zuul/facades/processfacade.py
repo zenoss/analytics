@@ -158,7 +158,7 @@ class ProcessFacade(TreeFacade):
             s = ''
             try:
                 import subprocess
-                from Products.ZenUtils.Utils import binPath
+                from Products.ZenUtils.path import binPath
                 device = IGUIDManager(self._dmd).getObject(deviceGuid)
                 s = '# ' + device.id
                 zenmodelerOpts = ['run', '--now', '--debug', '-v10', '-d', device.id]

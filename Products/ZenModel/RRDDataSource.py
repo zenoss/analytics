@@ -8,7 +8,7 @@
 ##############################################################################
 
 
-from Products.ZenUtils.Utils import binPath
+from Products.ZenUtils.path import binPath
 
 __doc__="""RRDDataSource
 

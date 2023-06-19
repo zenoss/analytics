@@ -41,10 +41,10 @@ from DeviceOrganizer import DeviceOrganizer
 
 from Products.ZenModel.Exceptions import *
 
+from Products.ZenUtils.path import binPath
 from Products.ZenUtils.Utils import isXmlRpc, setupLoggingHeader, executeCommand
-from Products.ZenUtils.Utils import binPath, clearWebLoggingStream
 from Products.ZenUtils import NetworkTree
-from Products.ZenUtils.Utils import unused, zenPath, unpublished, edgesToXML
+from Products.ZenUtils.Utils import unused, unpublished, edgesToXML
 from Products.Jobber.jobs import SubprocessJob
 from Products.ZenWidgets import messaging
 

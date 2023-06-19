@@ -14,7 +14,7 @@ class TestImportEverything(BaseTestCase):
 
     def testImportEverything(self):
         import os
-        from Products.ZenUtils.Utils import zenPath
+        from Products.ZenUtils.path import zenPath
         modules = ['ZenModel', 'ZenRelations', 'ZenRRD', 'ZenUtils',
                    'ZenEvents', 'ZenHub']
         for module in modules:

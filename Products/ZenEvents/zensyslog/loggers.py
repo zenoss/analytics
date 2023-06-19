@@ -12,7 +12,7 @@ from __future__ import absolute_import, print_function
 import logging
 import time
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 SYSLOG_DATE_FORMAT = "%b %d %H:%M:%S"
 SAMPLE_DATE = "Apr 10 15:19:22"

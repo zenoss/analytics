@@ -28,7 +28,7 @@ import StringIO
 import signal
 
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 class CollectorStats:

@@ -53,7 +53,7 @@ restore() {
 }
 
 link() {
-    VARPATH_SOURCE=$(unset TERM; echo "from Products.ZenUtils.Utils import varPath;print varPath('ZenPackSource')" | zendmd --script /dev/stdin)
+    VARPATH_SOURCE=$(unset TERM; echo "from Products.ZenUtils.path import varPath;print varPath('ZenPackSource')" | zendmd --script /dev/stdin)
     if ! [[ -d $VARPATH_SOURCE ]]; then
         echo "Unable to determine install path for linked zenpack, or path does not exist"
         echo "$VARPATH_SOURCE"

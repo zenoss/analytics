@@ -45,6 +45,9 @@ from Products.ZenModel.System import System
 from Products.ZenModel.ZenossSecurity import ZEN_VIEW
 from Products.ZenUtils.IpUtil import isip, getHostByName
 from Products.ZenUtils.Utils import getObjectsFromCatalog
+from Products.Zuul.infos.metricserver import (
+    MultiContextMetricServiceGraphDefinition
+)
 
 from Products.Zuul.catalog.component_catalog import (
     get_component_field_spec,
@@ -56,9 +59,6 @@ from Products.Zuul.decorators import info
 from Products.Zuul.exceptions import DatapointNameConfict
 from Products.Zuul.facades import TreeFacade
 from Products.Zuul import getFacade
-from Products.Zuul.infos.metricserver import (
-    MultiContextMetricServiceGraphDefinition,
-)
 from Products.Zuul.interfaces import IDeviceCollectorChangeEvent
 from Products.Zuul.interfaces import (
     IDeviceFacade,

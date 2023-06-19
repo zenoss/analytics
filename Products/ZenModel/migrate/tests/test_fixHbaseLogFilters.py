@@ -5,7 +5,7 @@ import unittest
 
 import common
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 class Test_fixHbaseLogFilters(unittest.TestCase, common.ServiceMigrationTestCase):

@@ -18,7 +18,8 @@ from AccessControl.class_init import InitializeClass
 
 from Products.ZenModel.ZenModelRM import ZenModelRM
 from Products.ZenModel.ZenossSecurity import ZEN_COMMON
-from Products.ZenUtils.Utils import importClass, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import importClass
 
 log = logging.getLogger("zen.reportserver")
 

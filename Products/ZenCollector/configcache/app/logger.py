@@ -17,7 +17,7 @@ import logging.handlers
 import os
 import signal
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 _default_config_template = {
     "version": 1,

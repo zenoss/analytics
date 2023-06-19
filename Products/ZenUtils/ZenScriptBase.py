@@ -25,7 +25,8 @@ from Products.ZenRelations.ZenPropertyManager import setDescriptors
 
 from .CmdBase import CmdBase
 from .Exceptions import ZentinelException
-from .Utils import getObjByPath, set_context, zenPath
+from .path import zenPath
+from .Utils import getObjByPath, set_context
 from .ZodbFactory import IZodbFactoryLookup
 
 defaultCacheDir = zenPath("var")

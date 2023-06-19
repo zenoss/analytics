@@ -17,7 +17,7 @@ from twisted.internet import reactor
 from twisted.internet.protocol import ProcessProtocol
 from twisted.internet.task import LoopingCall
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.Zuul.utils import safe_hasattr
 
 from ..CallHomeStatus import CallHomeStatus

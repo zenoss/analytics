@@ -35,7 +35,7 @@ from logging import FileHandler
 from logging.handlers import RotatingFileHandler
 from logging.handlers import TimedRotatingFileHandler
 
-from .Utils import zenPath
+from .path import zenPath
 
 log = logging.getLogger("zen.configlog")
 

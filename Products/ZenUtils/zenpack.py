@@ -40,7 +40,8 @@ from Products.ZenModel.ZenPack import (
     ZenPackNeedMigrateException
 )
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import cleanupSkins, zenPath, binPath, varPath, get_temp_dir
+from Products.ZenUtils.path import binPath, varPath, zenPath
+from Products.ZenUtils.Utils import cleanupSkins, get_temp_dir
 import Products.ZenModel.ZenPackLoader as ZPL
 from Products.ZenModel.ZenPackLoader import CONFIG_FILE, CONFIG_SECTION_ABOUT
 from Products.ZenModel.ZVersion import VERSION

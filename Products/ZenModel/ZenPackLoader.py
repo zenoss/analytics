@@ -12,7 +12,7 @@ __doc__='Base Classes for loading gunk in a ZenPack'
 
 from Products.ZenReports.ReportLoader import ReportLoader
 from Products.ZenUtils.events import pausedAndOptimizedIndexing
-from Products.ZenUtils.Utils import zenPath, binPath
+from Products.ZenUtils.path import binPath, zenPath
 from Products.ZenUtils.guid.interfaces import IGUIDManager
 from Products.ZenUtils.config import ConfigFile
 from Products.Zuul import getFacade

@@ -20,7 +20,8 @@ from Products.Zuul.infos.mib import (
     MibOrganizerNode, MibNode, FakeTopLevelNodeInfo
 )
 from Products.Jobber.jobs import SubprocessJob
-from Products.ZenUtils.Utils import binPath, snmptranslate
+from Products.ZenUtils.path import binPath
+from Products.ZenUtils.Utils import snmptranslate
 from Products.ZenModel.MibOrganizer import MibOrganizer
 from Products.ZenModel.MibModule import MibModule
 

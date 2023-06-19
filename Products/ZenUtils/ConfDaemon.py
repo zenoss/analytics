@@ -23,7 +23,7 @@ import socket
 import time
 
 from CmdBase import CmdBase
-from Utils import zenPath
+from .path import zenPath
 
 class ConfDaemon(CmdBase):
     

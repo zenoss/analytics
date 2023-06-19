@@ -14,7 +14,7 @@ from contextlib import contextmanager
 
 from Products.ZenTestCase.BaseTestCase import BaseTestCase
 from Products.ZenUtils.zenpack import ZenPackCmd
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 @contextmanager

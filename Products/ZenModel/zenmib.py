@@ -62,7 +62,7 @@ from Products.ZenUtils.mib import (
     PackageManager, SMIConfigFile, SMIDump, SMIDumpTool, ModuleManager,
     MibOrganizerPath, getMibModuleMap, MIBLoader
 )
-from Products.ZenUtils.Utils import zenPath, unused
+from Products.ZenUtils.path import zenPath
 
 
 

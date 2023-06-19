@@ -13,7 +13,7 @@ import pickle
 from ConfigParser import RawConfigParser
 
 from Products.DataCollector.plugins.CollectorPlugin import PythonPlugin
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 class ReplayProcessedResults(PythonPlugin):

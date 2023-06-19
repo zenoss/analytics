@@ -17,7 +17,7 @@ $Id:$
 '''
 import Migrate
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 menuxml = zenPath("Products/ZenModel/data/menus.xml")
 
 ZenPackItems = dict(

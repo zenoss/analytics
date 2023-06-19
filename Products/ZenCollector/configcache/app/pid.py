@@ -15,7 +15,7 @@ import fcntl
 import logging
 import os
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.pid")
 

@@ -26,7 +26,7 @@ from zenoss.protocols.queueschema import Schema
 from zenoss.protocols.data.queueschema import SCHEMA
 from zenoss.protocols.interfaces import IQueueSchema, IAMQPConnectionInfo
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 def _loadQjs(pack_path):

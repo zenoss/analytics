@@ -12,7 +12,7 @@ import logging
 log = logging.getLogger("zen.migrate")
 
 import Migrate
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 import servicemigration as sm
 sm.require("1.0.0")
 

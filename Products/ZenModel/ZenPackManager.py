@@ -19,7 +19,7 @@ from AccessControl import ClassSecurityInfo
 from ZenossSecurity import ZEN_MANAGE_DMD
 from Products.ZenMessaging.audit import audit
 from Products.ZenUtils.csrf import validate_csrf_token
-from Products.ZenUtils.Utils import binPath, varPath
+from Products.ZenUtils.path import binPath, varPath
 from Products.ZenWidgets import messaging
 import os
 import tempfile

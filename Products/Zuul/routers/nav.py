@@ -18,7 +18,7 @@ import logging
 from Products.ZenUtils.Ext import DirectRouter
 from Products.ZenUtils.extdirect.router import DirectResponse
 from Products.ZenUI3.security.security import permissionsForContext
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 # page stats logger
 log = logging.getLogger('zen.pagestats')
 # create file handler which logs even debug messages

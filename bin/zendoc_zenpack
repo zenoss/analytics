@@ -8,21 +8,26 @@ Create an XML file showing the items in the ZenPack.
 import os
 import os.path
 import datetime
-import zope.component
+
 from optparse import OptionParser
 
+import zope.component
+
 from Products.ZCatalog.ZCatalog import ZCatalog
-from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import importClass, zenPath
-from Products.ZenRelations.RelationshipBase import RelationshipBase
-from Products.ZenModel.interfaces import IZenDocProvider
-from Products.ZenModel.DataPointGraphPoint import DataPointGraphPoint
-from Products.ZenModel.RRDDataSource import RRDDataSource
-from Products.ZenModel.RRDDataPoint import RRDDataPoint
-from Products.ZenModel.RRDTemplate import RRDTemplate
-from Products.ZenModel.RRDGraph import RRDGraph
-from Products.ZenModel.GraphDefinition import GraphDefinition
 from transaction import commit
+
+from Products.ZenModel.DataPointGraphPoint import DataPointGraphPoint
+from Products.ZenModel.GraphDefinition import GraphDefinition
+from Products.ZenModel.interfaces import IZenDocProvider
+from Products.ZenModel.RRDDataPoint import RRDDataPoint
+from Products.ZenModel.RRDDataSource import RRDDataSource
+from Products.ZenModel.RRDGraph import RRDGraph
+from Products.ZenModel.RRDTemplate import RRDTemplate
+from Products.ZenRelations.RelationshipBase import RelationshipBase
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import importClass
+from Products.ZenUtils.ZenScriptBase import ZenScriptBase
+
 
 class XMLContainer:
     id = ''
