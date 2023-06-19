@@ -14,7 +14,7 @@ from zope.interface import implements
 from Products.ZenModel.IpNetwork import AutoDiscoveryJob
 from Products.ZenWidgets.messaging import IMessageSender
 from Products.Jobber.jobs import SubprocessJob
-from Products.ZenUtils.Utils import binPath
+from Products.ZenUtils.path import binPath
 from Products.Zuul import getFacade
 from Products.Zuul.catalog.interfaces import IModelCatalogTool
 from Products.Zuul.facades import TreeFacade

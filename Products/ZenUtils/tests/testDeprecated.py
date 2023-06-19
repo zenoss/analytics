@@ -19,7 +19,7 @@ import os
 import os.path
 import Globals
 from Products.ZenTestCase.BaseTestCase import BaseTestCase
-from Products.ZenUtils.Utils import zenPath  # TODO: this test shouldn't rely on zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.deprecated import deprecated, DeprecatedLogger
 
 TEST_LOGFILE = 'dEpReCaTeD.TeStLoG'  # something unique

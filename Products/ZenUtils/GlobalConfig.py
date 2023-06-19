@@ -17,7 +17,8 @@ import sys
 from optparse import OptionValueError, BadOptionError
 
 from .config import Config, ConfigLoader
-from .Utils import zenPath, getAllParserOptionsGen
+from .path import zenPath
+from .Utils import getAllParserOptionsGen
 
 log = logging.getLogger("zen.GlobalConfig")
 CONFIG_FILE = zenPath("etc", "global.conf")

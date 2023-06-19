@@ -27,7 +27,7 @@ class Commands(Migrate.Step):
             dmd.Devices._setProperty(name, default, **kw)
 
     def cutover(self, dmd):
-        from Products.ZenUtils.Utils import zenPath
+        from Products.ZenUtils.path import zenPath
         self.update(dmd, "zNagiosPath", "zCommandPath", zenPath('libexec'))
         if dmd.Devices.hasProperty("zNagiosCycleTime"):
             dmd.Devices._delProperty("zNagiosCycleTime")

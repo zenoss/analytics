@@ -22,7 +22,8 @@ import tarfile
 import ConfigParser
 
 from ZCmdBase import ZCmdBase
-from Products.ZenUtils.Utils import zenPath, binPath, requiresDaemonShutdown
+from Products.ZenUtils.path import binPath, zenPath
+from Products.ZenUtils.Utils import requiresDaemonShutdown
 
 from ZenBackupBase import *
 

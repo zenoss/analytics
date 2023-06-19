@@ -11,7 +11,7 @@ import logging
 import os
 import subprocess
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 logger = logging.getLogger("zen.callhome")
 

@@ -19,7 +19,7 @@ import transaction
 import logging
 
 from Products.ZenUtils.ZCmdBase import ZCmdBase
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenModel.Report import Report
 
 

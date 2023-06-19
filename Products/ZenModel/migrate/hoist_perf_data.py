@@ -32,7 +32,7 @@ class HoistPerfData(Migrate.Step):
     def cutover(self, dmd):
         names = dmd.getDmdRoot('Devices').getOrganizerNames(True)
         
-        from Products.ZenUtils.Utils import zenPath
+        from Products.ZenUtils.path import zenPath
         oldbase = zenPath('perf', 'Devices')
         names.sort()
         names.reverse()

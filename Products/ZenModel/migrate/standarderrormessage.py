@@ -17,7 +17,7 @@ Create standard_error_message at the root level of zope
 __version__ = "$Revision$"[11:-2]
 
 import Migrate
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class StandardErrorMessage(Migrate.Step):
     version = Migrate.Version(0, 23, 0)

@@ -26,7 +26,8 @@ from Products.ZenCollector import tasks
 from Products.ZenCollector.daemon import CollectorDaemon
 from Products.ZenUtils import IpUtil
 from Products.ZenUtils.FileCache import FileCache
-from Products.ZenUtils.Utils import unused, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import unused
 
 # perform some imports to allow twisted's PB to serialize these objects
 from Products.ZenCollector.services.config import DeviceProxy

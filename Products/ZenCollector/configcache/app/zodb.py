@@ -23,7 +23,8 @@ from ZPublisher.HTTPResponse import HTTPResponse
 from ZPublisher.BaseRequest import RequestContainer
 
 from Products.ZenRelations.ZenPropertyManager import setDescriptors
-from Products.ZenUtils.Utils import getObjByPath, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import getObjByPath
 
 _zodb_config_template = """\
 %import relstorage

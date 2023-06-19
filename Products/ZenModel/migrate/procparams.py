@@ -14,7 +14,7 @@ Reexecute zenprocs.sql to get new version of procedures (now parameterized)
 
 '''
 import Migrate
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 import os
 

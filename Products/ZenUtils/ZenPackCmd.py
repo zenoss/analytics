@@ -12,7 +12,8 @@ __doc__ = "Manage ZenPacks"
 
 from ZODB.transact import transact
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import cleanupSkins, zenPath, binPath, getObjByPath,atomicWrite, varPath
+from Products.ZenUtils.path import binPath, varPath, zenPath
+from Products.ZenUtils.Utils import cleanupSkins, getObjByPath, atomicWrite
 
 from Products.ZenModel import ZVersion
 from Products.ZenModel.ZenPack import ZenPackException, \

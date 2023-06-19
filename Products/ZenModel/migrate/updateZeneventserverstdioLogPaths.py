@@ -11,7 +11,7 @@ import logging
 import Migrate
 import os
 import servicemigration as sm
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.migrate")
 sm.require("1.1.10")

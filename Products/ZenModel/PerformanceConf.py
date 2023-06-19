@@ -33,7 +33,8 @@ from Monitor import Monitor
 from Products.Jobber.jobs import SubprocessJob
 from Products.ZenRelations.RelSchema import ToMany, ToOne
 from Products.ZenUtils.deprecated import deprecated
-from Products.ZenUtils.Utils import binPath, unused, isXmlRpc, executeCommand
+from Products.ZenUtils.path import binPath
+from Products.ZenUtils.Utils import unused, isXmlRpc, executeCommand
 from Products.ZenUtils.GlobalConfig import getGlobalConfiguration
 from Products.ZenModel.ZDeviceLoader import CreateDeviceJob
 from Products.ZenWidgets import messaging

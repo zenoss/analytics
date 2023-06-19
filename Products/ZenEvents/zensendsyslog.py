@@ -10,7 +10,7 @@
 
 import socket
 import time
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 defaultInfile = zenPath("log/origsyslog.log")
 
 from Products.ZenUtils.CmdBase import CmdBase

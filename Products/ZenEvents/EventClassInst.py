@@ -43,7 +43,7 @@ from Products.ZenUtils.Utils import convToUnits, zdecode, getDisplayName
 from Products.ZenUtils.Time import SaveMessage
 from Products import Zuul
 from Products.Zuul.interfaces import IInfo
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.daemonconfig import IDaemonConfig
 
 from zenoss.protocols.jsonformat import to_dict

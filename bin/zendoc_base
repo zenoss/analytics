@@ -12,7 +12,8 @@ import os.path
 import datetime
 
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import importClass, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import importClass
 from transaction import commit
 
 class XMLContainer:

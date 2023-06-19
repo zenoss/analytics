@@ -11,7 +11,7 @@ import os
 
 from Products.ZenUtils.config import Config, ConfigLoader
 from Products.ZenUtils.GlobalConfig import getGlobalConfiguration
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 def add_config_arguments(parser):

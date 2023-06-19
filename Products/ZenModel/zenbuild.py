@@ -22,7 +22,7 @@ import transaction
 import subprocess
 import sys
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 from Products.ZenUtils import Security
 from Products.ZenUtils.CmdBase import CmdBase

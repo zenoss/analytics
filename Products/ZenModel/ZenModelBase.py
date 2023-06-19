@@ -35,7 +35,8 @@ from zope.component import getGlobalSiteManager, getUtility
 
 from Products.ZenModel.interfaces import IZenDocProvider
 from Products.ZenRelations.ZenPropertyManager import iscustprop
-from Products.ZenUtils.Utils import zenpathsplit, zenpathjoin, getDisplayType
+from Products.ZenUtils.path import zenpathjoin, zenpathsplit
+from Products.ZenUtils.Utils import getDisplayType
 from Products.ZenUtils.Utils import createHierarchyObj, getHierarchyObj
 from Products.ZenUtils.Utils import getObjByPath, unpublished
 

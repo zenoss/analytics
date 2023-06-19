@@ -21,7 +21,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products import Zuul
 from Products.ZenUtils.guid.interfaces import IGUIDManager
 from Products.ZenUtils.virtual_root import IVirtualRoot
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenModel.DataRoot import DataRoot
 
 

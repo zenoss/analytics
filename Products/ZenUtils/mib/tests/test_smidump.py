@@ -13,7 +13,7 @@ import os
 from subprocess import PIPE
 from unittest import TestCase
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.mib import SMIConfigFile, SMIDump, SMIDumpTool, MIBFile
 from Products.ZenUtils.mib import smidump
 

@@ -11,7 +11,7 @@ import os
 import re
 import cgitb
 from cStringIO import StringIO
-from Products.ZenUtils.Utils import unused, zenPath
+from Products.ZenUtils.path import zenPath
 
 
 _PATTERN = re.compile(

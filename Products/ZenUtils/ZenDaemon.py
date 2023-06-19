@@ -29,7 +29,8 @@ from Products.Zuul.utils import safe_hasattr as hasattr
 
 from .CmdBase import CmdBase
 from .dumpthreads import dump_threads
-from .Utils import binPath, HtmlFormatter, setLogLevel, zenPath
+from .path import binPath, zenPath
+from .Utils import HtmlFormatter, setLogLevel
 from .Watchdog import Reporter
 
 # Daemon creation code below based on Recipe by Chad J. Schroeder

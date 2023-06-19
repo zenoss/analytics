@@ -42,7 +42,8 @@ import sys
 
 from twisted.spread import pb
 
-from Products.ZenUtils.Utils import importClass, zenPath
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import importClass
 
 log = logging.getLogger("zen.Plugins")
 

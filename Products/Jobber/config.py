@@ -14,7 +14,7 @@ import attr
 from Products.ZenUtils.config import Config, ConfigLoader
 from Products.ZenUtils.GlobalConfig import getGlobalConfiguration
 from Products.ZenUtils.RedisUtils import DEFAULT_REDIS_URL
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 _default_configs = {

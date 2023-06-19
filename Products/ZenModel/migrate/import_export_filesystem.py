@@ -21,7 +21,7 @@ import os
 
 import Migrate
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class ImportExportFilesystem(Migrate.Step):
     version = Migrate.Version(0, 23, 0)

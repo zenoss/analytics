@@ -17,7 +17,7 @@ from unittest import TestCase
 
 from Products.ZenHub.services.ProcessConfig import ProcessProxy
 from Products.ZenRRD.zenprocess import mapResultsToDicts, ZenProcessTask
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.testzenprocess")
 

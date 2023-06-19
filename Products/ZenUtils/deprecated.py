@@ -12,7 +12,7 @@ import Globals
 import logging
 import traceback
 from decorator import decorator
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 class DeprecatedLogger(object):

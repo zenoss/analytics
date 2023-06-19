@@ -12,7 +12,7 @@
 import re
 import logging
 from ZODB.transact import transact
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from subprocess import call
 log = logging.getLogger("zenoss.addsystemuser")
 

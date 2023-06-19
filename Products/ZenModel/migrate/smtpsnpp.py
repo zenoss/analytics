@@ -38,7 +38,7 @@ def parseconfig(options):
 class OptionsBucket:
     pass
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class smtpsnpp(Migrate.Step):
     version = Migrate.Version(1, 0, 0)

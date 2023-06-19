@@ -19,7 +19,7 @@ import sys
 
 from Products.ZenUtils.config import ConfigFile
 from Products.ZenUtils.configlog import ZenRotatingFileHandler
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger("zen.zencheckzends")

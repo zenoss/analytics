@@ -15,7 +15,7 @@ class TestImportEverything(BaseTestCase):
 
     def testImportEverything(self):
         import os
-        from Products.ZenUtils.Utils import zenPath
+        from Products.ZenUtils.path import zenPath
 
         for fs, ds, d in os.walk(zenPath("Products", self.module)):
             for f in fs:
