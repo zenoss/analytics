@@ -17,7 +17,7 @@ from AccessControl.class_init import InitializeClass
 from Products.ZenModel.ZenModelRM import ZenModelRM
 from Products.ZenModel.ZenossSecurity import ZEN_COMMON
 from Products.ZenRelations.RelSchema import ToManyCont, ToOne
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.Portlet")
 

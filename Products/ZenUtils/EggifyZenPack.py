@@ -10,9 +10,9 @@
 
 __doc__ = "Convert old-style zenpacks to zenpack eggs"
 
+from Pruducts.ZenUtils.path import zenPath
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
 from Products.ZenModel.ZenPack import ZenPackException
-from Utils import zenPath
 import ZenPackCmd
 import os, sys
 import shutil

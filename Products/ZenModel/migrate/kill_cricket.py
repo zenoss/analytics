@@ -22,7 +22,7 @@ from Acquisition import aq_base
 
 import Migrate
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class KillCricket(Migrate.Step):
     version = Migrate.Version(0, 20, 0)

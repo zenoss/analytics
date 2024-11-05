@@ -42,7 +42,8 @@ import os
 import sys
 import string
 from Products.ZenMessaging.audit import audit
-from Products.ZenUtils.Utils import zenPath, binPath, unpublished
+from Products.ZenUtils.path import binPath, zenPath
+from Products.ZenUtils.Utils import unpublished
 from Products.ZenUtils.jsonutils import json
 from Products.ZenUtils.ZenTales import talesCompile, getEngine
 from Products.ZenUtils.GlobalConfig import globalConfToDict

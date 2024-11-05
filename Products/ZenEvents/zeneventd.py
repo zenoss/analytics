@@ -62,7 +62,7 @@ from Products.ZenMessaging.queuemessaging.QueueConsumer import QueueConsumer
 from Products.ZenUtils.daemonconfig import IDaemonConfig
 from Products.ZenUtils.guid import guid
 from Products.ZenUtils.MetricReporter import MetricReporter
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.ZCmdBase import ZCmdBase
 
 

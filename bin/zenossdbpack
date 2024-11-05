@@ -16,7 +16,7 @@ import tempfile
 import argparse
 import subprocess
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenUtils.GlobalConfig import getGlobalConfiguration
 
 from relstorage import zodbpack

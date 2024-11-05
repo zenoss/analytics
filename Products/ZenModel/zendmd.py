@@ -86,7 +86,8 @@ sys.argv = _argv # restore normality
 from Products.CMFCore.utils import getToolByName
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
-from Products.ZenUtils.Utils import zenPath, set_context
+from Products.ZenUtils.path import zenPath
+from Products.ZenUtils.Utils import set_context
 from Products.ZenModel.IpNetwork import IpNetworkPrinterFactory
 from Products.ZenMessaging import audit
 from Products.Zuul.utils import safe_hasattr

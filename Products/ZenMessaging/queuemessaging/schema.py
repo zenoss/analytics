@@ -25,7 +25,7 @@ from zenoss.protocols.queueschema import Schema
 from zope.component import getUtility
 
 from Products.ZenUtils.PkgResources import pkg_resources
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 
 def _loadQjs(pack_path):

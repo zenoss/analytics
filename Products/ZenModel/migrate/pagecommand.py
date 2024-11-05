@@ -39,7 +39,7 @@ def parseconfig(options):
 class OptionsBucket:
     pass
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class pagecommand(Migrate.Step):
     version = Migrate.Version(2, 2, 0)

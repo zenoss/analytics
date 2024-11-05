@@ -4,7 +4,7 @@ import os
 import re
 
 import servicemigration as sm
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.migrate")
 sm.require("1.0.0")

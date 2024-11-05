@@ -16,7 +16,7 @@ restart it.
 
 '''
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 import logging
 
 import socket as s

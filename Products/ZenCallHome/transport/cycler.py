@@ -20,7 +20,7 @@ from twisted.internet.task import LoopingCall
 from Products.ZenCallHome.CallHomeStatus import CallHomeStatus
 from Products.ZenCallHome.transport import CallHome
 from Products.ZenCallHome.transport.methods.directpost import direct_post
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 from Products.Zuul.utils import safe_hasattr
 
 # number of seconds between metrics updates

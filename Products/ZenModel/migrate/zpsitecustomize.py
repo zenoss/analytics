@@ -12,7 +12,7 @@ __doc__='''
 
 '''
 import Migrate
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class zpSiteCustomize(Migrate.Step):
     version = Migrate.Version(2, 2, 0)

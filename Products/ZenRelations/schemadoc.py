@@ -13,7 +13,7 @@ import shutil
 import sys
 
 from Products.ZenRelations.utils import importClasses
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 logging.basicConfig()
 root = logging.getLogger()

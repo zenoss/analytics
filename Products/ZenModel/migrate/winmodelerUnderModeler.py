@@ -16,7 +16,7 @@ class WinModelerUnderModeler(Migrate.Step):
     
     def cutover(self, dmd):
         import os
-        from Products.ZenUtils.Utils import binPath
+        from Products.ZenUtils.path import binPath
         os.system('%s stop >/dev/null 2>&1' % binPath('zenwinmodeler'))
         conn = dmd.ZenEventManager.connect()
         curr = conn.cursor()

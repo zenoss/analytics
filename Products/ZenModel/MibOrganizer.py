@@ -21,7 +21,8 @@ from Products.Jobber.jobs import SubprocessJob
 from Products.ZenRelations.RelSchema import ToOne, ToManyCont
 from Products.ZenUtils.Search import makeCaseInsensitiveKeywordIndex
 from Products.ZenWidgets import messaging
-from Products.ZenUtils.Utils import atomicWrite, binPath, zenPath
+from Products.ZenUtils.path import binPath, zenPath
+from Products.ZenUtils.Utils import atomicWrite
 
 from .MibModule import MibModule
 from .Organizer import Organizer

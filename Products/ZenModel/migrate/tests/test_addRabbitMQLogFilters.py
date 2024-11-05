@@ -9,7 +9,7 @@
 
 import common
 import unittest
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class test_addRabbitMQLogFilters(unittest.TestCase, common.ServiceMigrationTestCase):
     """

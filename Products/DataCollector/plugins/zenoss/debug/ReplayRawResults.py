@@ -35,7 +35,7 @@ from importlib import import_module
 
 from Products.DataCollector.Plugins import loadPlugins
 from Products.DataCollector.plugins.CollectorPlugin import PythonPlugin
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.zenmodeler.ReplayRawResults")
 

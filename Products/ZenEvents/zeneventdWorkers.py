@@ -23,7 +23,7 @@ from zenoss.protocols.interfaces import IAMQPConnectionInfo, IQueueSchema
 from zenoss.protocols.jsonformat import to_dict
 from zenoss.protocols.eventlet.amqp import Publishable, getProtobufPubSub
 from Products.ZenCollector.utils.workers import workersBuildOptions
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 from metrology import Metrology
 

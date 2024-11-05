@@ -10,4 +10,4 @@
 
 
 . $ZENHOME/bin/zenfunctions 
-$PYTHON -c "import sys; from Products.ZenUtils.Utils import binPath; sys.exit(0 if binPath(\"$CMD\") else 1)"
+$PYTHON -c "import sys; from Products.ZenUtils.path import binPath; sys.exit(0 if binPath(\"$CMD\") else 1)"

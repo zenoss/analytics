@@ -25,7 +25,8 @@ from Products.ZenRelations.ZenPropertyManager import setDescriptors
 
 from .Exceptions import ZentinelException
 from .mysql import MySQLdb
-from .Utils import getObjByPath, wait, zenPath
+from .path import zenPath
+from .Utils import getObjByPath, wait
 from .ZenDaemon import ZenDaemon
 from .ZodbFactory import IZodbFactoryLookup
 

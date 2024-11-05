@@ -16,7 +16,7 @@ import Migrate
 import servicemigration as sm
 sm.require("1.1.11")
 from servicemigration import HealthCheck
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class AddSolrService(Migrate.Step):
     """

@@ -11,7 +11,7 @@
 import os
 import socket
 
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 def main():
     "Run a tcpdump PCAP file to zentrap"

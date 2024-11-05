@@ -13,7 +13,7 @@ changing them doesn't require a restart.
 """
 import os
 import logging
-from Products.ZenUtils.Utils import unused, zenPath
+from Products.ZenUtils.path import zenPath
 from Products.ZenModel.migrate import Migrate
 from Products.Zuul import getFacade
 

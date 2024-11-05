@@ -13,7 +13,7 @@ import sys
 from optparse import OptionParser
 import subprocess
 import re
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class Main(object):
 

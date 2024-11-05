@@ -17,7 +17,7 @@ Add Processes organizer and friends.
 __version__ = "$Revision$"[11:-2]
 
 import Migrate
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 class Processes(Migrate.Step):
     version = Migrate.Version(0, 22, 0)

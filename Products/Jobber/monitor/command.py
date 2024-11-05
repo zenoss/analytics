@@ -16,7 +16,7 @@ from celery.bin.base import Command
 
 from Products.ZenCollector.configcache.app.args import ZenHelpFormatter
 from Products.ZenUtils.config import ConfigLoader
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 from .broker import Broker
 from .collector import MetricsCollector

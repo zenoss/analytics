@@ -14,7 +14,7 @@ This updates solr configs during the migrations from 7.7.3 to 8.11.1 version.
 import logging
 import Migrate
 import servicemigration as sm
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.path import zenPath
 
 log = logging.getLogger("zen.migrate")
 
