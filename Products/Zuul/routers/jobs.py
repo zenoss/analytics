@@ -117,9 +117,8 @@ class JobsRouter(DirectRouter):
             "PENDING": "created",
             "RETRY": "started",
         }
-        for job in self.api.getUserJobs():
-            if job.status in validstates:
-                results[job.status].append(job)
+        for job in self.api.getUserJobs(statuses=validstates.keys()):
+            results[job.status].append(job)
         # Sort and slice appropriately -- most recent 10 items
         for status, jobs in results.iteritems():
             try:

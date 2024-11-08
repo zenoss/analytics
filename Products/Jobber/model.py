@@ -74,7 +74,7 @@ class JobRecord(object):
         return sorted(
             set(
                 tuple(dir(JobRecord))
-                + tuple((getattr(self, "details") or {}).keys())
+                + tuple((getattr(self, "details", None) or {}).keys())
             )
         )
 
@@ -89,7 +89,7 @@ class JobRecord(object):
             for k in self.__slots__ + ("uuid", "duration", "complete")
             if k != "details"
         }
-        details = getattr(self, "details") or {}
+        details = getattr(self, "details", None) or {}
         base.update(**details)
         return base
 
@@ -375,7 +375,6 @@ def save_jobrecord(log, body=None, headers=None, properties=None, **ignored):
 
 
 def _save_record(log, storage, record):
-    # Retrieve the job storage connection.
     jobid = record["jobid"]
     if "userid" not in record:
         log.warn("No user ID submitted with job %s", jobid)

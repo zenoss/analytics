@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import json
 import logging
 import re
+import types
 
 from collections import Container, Iterable, Sized
 
@@ -23,9 +24,15 @@ from Products.ZenUtils.RedisUtils import getRedisClient
 
 from .config import ZenCeleryConfig
 
-_keybase = "zenjobs:job:"
-_keypattern = _keybase + "*"
-_keytemplate = "{}{{}}".format(_keybase)
+_appkey = "zenjobs"
+
+_jobkey_template = "{}:job:{{}}".format(_appkey)
+_statuskey_template = "{}:status:{{}}".format(_appkey)
+_useridkey_template = "{}:userid:{{}}".format(_appkey)
+
+_alljobkeys = _jobkey_template.format("*")
+_allstatuskeys = _statuskey_template.format("*")
+_alluseridkeys = _useridkey_template.format("*")
 
 
 log = logging.getLogger("zen.zenjobs")
@@ -38,7 +45,6 @@ def makeJobStore():
 
 
 class _Converter(object):
-
     __slots__ = ("dumps", "loads")
 
     def __init__(self, dumps, loads):
@@ -170,35 +176,120 @@ class JobStore(Container, Iterable, Sized):
         :rtype: Iterable[str]
         :raises TypError: if an unsupported value type is given for a field
         """
-        field_names = fields.keys()
-        _verifyfields(field_names)
-        matchers = {}
-        for name, match in fields.items():
-            # Note: check for string first because strings are also
-            # iterable.
-            if isinstance(match, six.string_types):
-                matchers[name] = match
-            elif isinstance(match, Iterable):
-                matchers[name] = _Any(*match)
-            elif isinstance(match, re._pattern_type):
-                matchers[name] = _RegEx(match)
-            elif isinstance(match, float):
-                matchers[name] = "{:f}".format(match)
-            else:
-                raise TypeError(
-                    "Type '%s' not supported for field '%s'"
-                    % (type(match), name),
+
+        # 'created', 'started', 'finished' fields are indexed by sorted-set
+        # keys of the same names.
+        # 'name', 'status', and 'userid' fields are indexed by set keys where
+        # each name, status, and userid value is its own key.
+
+        _verifyfields(fields.keys())
+
+        statuses = fields.pop("status", ())
+        if statuses:
+            if isinstance(statuses, six.string_types):
+                statuses = (statuses,)
+            elif isinstance(statuses, types.GeneratorType):
+                statuses = tuple(statuses)
+
+        userids = fields.pop("userid", ())
+        if userids:
+            if isinstance(userids, six.string_types):
+                userids = (userids,)
+            elif isinstance(userids, types.GeneratorType):
+                userids = tuple(userids)
+
+        if not fields:
+            result = self._index_lookup(statuses, userids)
+            if result is not None:
+                return result
+        return self._index_and_record_lookup(statuses, userids, fields)
+
+    def _index_lookup(self, statuses, userids):
+        if len(statuses) > 1 or len(userids) > 1:
+            return
+        status = statuses[0] if statuses else None
+        userid = userids[0] if userids else None
+        if status and not userid:
+            return (
+                jobid
+                for jobid in self.__client.sscan_iter(
+                    _statuskey(status), count=self.__scan_count
                 )
+            )
+        if userid and not status:
+            return (
+                jobid
+                for jobid in self.__client.sscan_iter(
+                    _useridkey(userid), count=self.__scan_count
+                )
+            )
+        return (
+            jobid
+            for jobid in self.__client.sinter(
+                _statuskey(status), _useridkey(userid)
+            )
+        )
 
-        def get_fields(key):
-            return self.__client.hmget(key, *field_names)
+    def _index_and_record_lookup(self, statuses, userids, fields):
+        result = self._index_lookup(statuses, userids)
+        jobids = set() if result is None else set(result)
 
+        if not jobids:
+            jobids.update(self._get_jobids_by_index(_statuskey, statuses))
+            jobids.update(self._get_jobids_by_index(_useridkey, userids))
+
+        matchers = self._get_matchers(fields)
+
+        if jobids:
+            if not fields:
+                return jobids
+            return (
+                jobid
+                for jobid in jobids
+                if self._match_fields(matchers, _jobkey(jobid), fields.keys())
+            )
         return (
             self.__client.hget(key, "jobid")
             for key in self.__client.scan_iter(
-                match=_keypattern, count=self.__scan_count
+                match=_alljobkeys, count=self.__scan_count
             )
-            if matchers == dict(zip(field_names, get_fields(key)))
+            if self._match_fields(matchers, key, fields.keys())
+        )
+
+    def _get_matchers(self, fields):
+        matchers = {}
+        for name, value in fields.items():
+            # Note: check for string first because strings are iterable.
+            if isinstance(value, six.string_types):
+                matchers[name] = value
+            elif isinstance(value, Iterable):
+                matchers[name] = _Any(*value)
+            elif isinstance(value, re._pattern_type):
+                matchers[name] = _RegEx(value)
+            elif isinstance(value, float):
+                matchers[name] = "{:f}".format(value)
+            else:
+                raise TypeError(
+                    "Type '%s' not supported for field '%s'"
+                    % (type(value), name),
+                )
+        return matchers
+
+    def _match_fields(self, matchers, jobkey, fieldnames):
+        if not fieldnames:
+            return ()
+        record = dict(
+            zip(fieldnames, self.__client.hmget(jobkey, *fieldnames))
+        )
+        return matchers == record
+
+    def _get_jobids_by_index(self, keyfactory, indexids):
+        if not indexids:
+            return ()
+        return (
+            jobid
+            for key in (keyfactory(indexid) for indexid in indexids)
+            for jobid in self.__client.sscan_iter(key, count=self.__scan_count)
         )
 
     def getfield(self, jobid, name, default=None):
@@ -217,7 +308,7 @@ class JobStore(Container, Iterable, Sized):
         """
         if name not in Fields:
             raise AttributeError("Job record has no attribute '%s'" % name)
-        key = _key(jobid)
+        key = _jobkey(jobid)
         if not self.__client.exists(key):
             return default
         raw = self.__client.hget(key, name)
@@ -246,18 +337,46 @@ class JobStore(Container, Iterable, Sized):
                     ", ".join("'%s'" % name for name in badfields),
                 ),
             )
-        key = _key(jobid)
-        if not self.__client.exists(key):
+        jobkey = _jobkey(jobid)
+        if not self.__client.exists(jobkey):
             raise KeyError("Job not found: %s" % jobid)
+        oldstatus, olduserid = self.__client.hmget(
+            jobkey, ("status", "userid")
+        )
         deleted_fields = [k for k, v in fields.items() if v is None]
         if deleted_fields:
-            self.__client.hdel(key, *deleted_fields)
+            self.__client.hdel(jobkey, *deleted_fields)
         fields = {
             k: Fields[k].dumps(v) for k, v in fields.items() if v is not None
         }
         if fields:
-            self.__client.hmset(key, fields)
-        self.__expire_key_if_status_is_ready(key)
+            self.__client.hmset(jobkey, fields)
+        newstatus, newuserid = self.__client.hmget(
+            jobkey, ("status", "userid")
+        )
+        self._update_status_index(jobid, oldstatus, newstatus)
+        self._update_userid_index(jobid, olduserid, newuserid)
+        self.__expire_key_if_status_is_ready(jobkey)
+
+    def _update_status_index(self, jobid, oldstatus, newstatus):
+        if newstatus == oldstatus:
+            return
+        if oldstatus:
+            oldstatuskey = _statuskey(oldstatus)
+            self.__client.srem(oldstatuskey, jobid)
+        if newstatus:
+            newstatuskey = _statuskey(newstatus)
+            self.__client.srem(newstatuskey, jobid)
+
+    def _update_userid_index(self, jobid, olduserid, newuserid):
+        if newuserid == olduserid:
+            return
+        if olduserid:
+            olduseridkey = _useridkey(olduserid)
+            self.__client.srem(olduseridkey, jobid)
+        if newuserid:
+            newuseridkey = _useridkey(newuserid)
+            self.__client.srem(newuseridkey, jobid)
 
     def keys(self):
         """Return all existing job IDs.
@@ -267,7 +386,7 @@ class JobStore(Container, Iterable, Sized):
         return (
             self.__client.hget(key, "jobid")
             for key in self.__client.scan_iter(
-                match=_keypattern, count=self.__scan_count
+                match=_alljobkeys, count=self.__scan_count
             )
         )
 
@@ -305,7 +424,7 @@ class JobStore(Container, Iterable, Sized):
         :param jobids: Iterable[str]
         :rtype: Iterator[Dict[str, Union[str, float]]]
         """
-        keys = (_key(jobid) for jobid in jobids)
+        keys = (_jobkey(jobid) for jobid in jobids)
         raw = (
             self.__client.hgetall(key)
             for key in keys
@@ -325,7 +444,7 @@ class JobStore(Container, Iterable, Sized):
         :type default: Any
         :rtype: Union[Dict[str, Union[str, float]], default]
         """
-        key = _key(jobid)
+        key = _jobkey(jobid)
         if not self.__client.exists(key):
             return default
         item = self.__client.hgetall(key)
@@ -340,7 +459,7 @@ class JobStore(Container, Iterable, Sized):
         :rtype: Dict[str, Union[str, float]]
         :raises: KeyError
         """
-        key = _key(jobid)
+        key = _jobkey(jobid)
         if not self.__client.exists(key):
             raise KeyError("Job not found: %s" % jobid)
         item = self.__client.hgetall(key)
@@ -359,12 +478,25 @@ class JobStore(Container, Iterable, Sized):
         data = {
             k: Fields[k].dumps(v) for k, v in data.items() if v is not None
         }
-        key = _key(jobid)
+        key = _jobkey(jobid)
         olddata = self.__client.hgetall(key)
         deleted_fields = set(olddata) - set(data)
         if deleted_fields:
             self.__client.hdel(key, *deleted_fields)
         self.__client.hmset(key, data)
+
+        # Update userid index
+        userid = data.get("userid")
+        if userid:
+            userid_key = _useridkey(userid)
+            self.__client.sadd(userid_key, jobid)
+
+        # Update status index
+        status = data.get("status")
+        if status:
+            status_key = _statuskey(status)
+            self.__client.sadd(status_key, jobid)
+
         self.__expire_key_if_status_is_ready(key)
 
     def mdelete(self, *jobids):
@@ -375,8 +507,16 @@ class JobStore(Container, Iterable, Sized):
         """
         if not jobids:
             return
-        jobids = (_key(jobid) for jobid in jobids)
-        self.__client.delete(*jobids)
+        jobkeys = (_jobkey(jobid) for jobid in jobids)
+        self.__client.delete(*jobkeys)
+        for statuskey in self.__client.scan_iter(
+            _allstatuskeys, count=self.__scan_count
+        ):
+            self.__client.srem(statuskey, *jobids)
+        for useridkey in self.__client.scan_iter(
+            _alluseridkeys, count=self.__scan_count
+        ):
+            self.__client.srem(useridkey, *jobids)
 
     def __delitem__(self, jobid):
         """Delete the job data associated with the given job ID.
@@ -385,10 +525,29 @@ class JobStore(Container, Iterable, Sized):
 
         :type jobid: str
         """
-        key = _key(jobid)
-        if not self.__client.exists(key):
+        jobkey = _jobkey(jobid)
+        if not self.__client.exists(jobkey):
+            for statuskey in self.__client.scan_iter(
+                _allstatuskeys, count=self.__scan_count
+            ):
+                self.__client.srem(statuskey, jobid)
+            for useridkey in self.__client.scan_iter(
+                _alluseridkeys, count=self.__scan_count
+            ):
+                self.__client.srem(useridkey, jobid)
             raise KeyError("Job not found: %s" % jobid)
-        self.__client.delete(key)
+
+        status = self.__client.hget(jobkey, "status")
+        if status:
+            statuskey = _statuskey(status)
+            self.__client.srem(statuskey, jobid)
+
+        userid = self.__client.hget(jobkey, "userid")
+        if userid:
+            useridkey = _useridkey(userid)
+            self.__client.srem(useridkey, jobid)
+
+        self.__client.delete(jobkey)
 
     def __contains__(self, jobid):
         """Return True if job data exists for the given job ID.
@@ -396,13 +555,13 @@ class JobStore(Container, Iterable, Sized):
         :type jobid: str
         :rtype: boolean
         """
-        return self.__client.exists(_key(jobid))
+        return self.__client.exists(_jobkey(jobid))
 
     def __len__(self):
         return sum(
             1
             for _ in self.__client.scan_iter(
-                match=_keypattern, count=self.__scan_count
+                match=_alljobkeys, count=self.__scan_count
             )
         )
 
@@ -414,7 +573,7 @@ class JobStore(Container, Iterable, Sized):
         return self.keys()
 
     def ttl(self, jobid):
-        result = self.__client.ttl(_key(jobid))
+        result = self.__client.ttl(_jobkey(jobid))
         return result if result >= 0 else None
 
     def __expire_key_if_status_is_ready(self, key):
@@ -423,9 +582,19 @@ class JobStore(Container, Iterable, Sized):
             self.__client.expire(key, self.__expires)
 
 
-def _key(jobid):
+def _jobkey(jobid):
     """Return the redis key for the given job ID."""
-    return _keytemplate.format(jobid)
+    return _jobkey_template.format(jobid)
+
+
+def _statuskey(status):
+    """Return the redis key for the given status."""
+    return _statuskey_template.format(status)
+
+
+def _useridkey(userid):
+    """Return the redis key for the given user ID."""
+    return _useridkey_template.format(userid)
 
 
 def _iteritems(client, count):
@@ -433,7 +602,7 @@ def _iteritems(client, count):
 
     Only (key, data) pairs where data is not None are returned.
     """
-    keys = client.scan_iter(match=_keypattern, count=count)
+    keys = client.scan_iter(match=_alljobkeys, count=count)
     raw = ((key, client.hgetall(key)) for key in keys)
     return ((key, data) for key, data in raw if data)
 

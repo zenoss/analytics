@@ -8,6 +8,9 @@
 ##############################################################################
 
 import logging
+
+import six
+
 from AccessControl import getSecurityManager
 from Products.Zuul.facades import ZuulFacade
 
@@ -96,12 +99,15 @@ class JobsFacade(ZuulFacade):
                 None,
             )
 
-    def getUserJobs(self):
+    def getUserJobs(self, statuses=None):
         """Returns the jobs associated with the current user.
 
         :rtype: Tuple[JobRecord]
         """
         user = getSecurityManager().getUser()
-        if not isinstance(user, basestring):
+        if not isinstance(user, six.string_types):
             user = user.getId()
-        return self._dmd.JobManager.query(criteria={"userid": user})["jobs"]
+        criteria = {"userid": user}
+        if statuses:
+            criteria["status"] = statuses
+        return self._dmd.JobManager.query(criteria=criteria)["jobs"]
