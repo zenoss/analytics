@@ -25,6 +25,9 @@ from Products.ZenUtils.RedisUtils import getRedisClient
 from .config import ZenCeleryConfig
 
 _appkey = "zenjobs"
+_createdkey = "{}:created".format(_appkey)
+_startedkey = "{}:started".format(_appkey)
+_finishedkey = "{}:finished".format(_appkey)
 
 _jobkey_template = "{}:job:{{}}".format(_appkey)
 _statuskey_template = "{}:status:{{}}".format(_appkey)
@@ -176,12 +179,6 @@ class JobStore(Container, Iterable, Sized):
         :rtype: Iterable[str]
         :raises TypError: if an unsupported value type is given for a field
         """
-
-        # 'created', 'started', 'finished' fields are indexed by sorted-set
-        # keys of the same names.
-        # 'name', 'status', and 'userid' fields are indexed by set keys where
-        # each name, status, and userid value is its own key.
-
         _verifyfields(fields.keys())
 
         statuses = fields.pop("status", ())
