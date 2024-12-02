@@ -1,115 +1,125 @@
 #!/usr/bin/env python
 
-__doc__ = """zendoc_zenpack
+"""zendoc_zenpack
 
 Create an XML file showing the items in the ZenPack.
 """
 
+from __future__ import absolute_import, print_function
+
 import os
 import os.path
 import datetime
+
 import zope.component
-from optparse import OptionParser
 
 from Products.ZCatalog.ZCatalog import ZCatalog
-from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import importClass, zenPath
-from Products.ZenRelations.RelationshipBase import RelationshipBase
+
 from Products.ZenModel.interfaces import IZenDocProvider
-from Products.ZenModel.DataPointGraphPoint import DataPointGraphPoint
-from Products.ZenModel.RRDDataSource import RRDDataSource
-from Products.ZenModel.RRDDataPoint import RRDDataPoint
-from Products.ZenModel.RRDTemplate import RRDTemplate
-from Products.ZenModel.RRDGraph import RRDGraph
-from Products.ZenModel.GraphDefinition import GraphDefinition
-from transaction import commit
+from Products.ZenRelations.RelationshipBase import RelationshipBase
+from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.ZenScriptBase import ZenScriptBase
+
 
 class XMLContainer:
-    id = ''
-    description = ''
-    path = ''
-    meta_type = ''
+    id = ""
+    description = ""
+    path = ""
+    meta_type = ""
 
-    def __init__(self, id='', meta_type=''):
+    def __init__(self, id="", meta_type=""):
         self.id = id
         self.meta_type = meta_type
 
     def getPrimaryPath(self):
         return self.path
 
-threshie = XMLContainer('threshold', 'ThresholdContainer')
-plugin_container = XMLContainer('modeler_plugin_container',
-                                'ModelerPluginContainer')
+
+threshie = XMLContainer("threshold", "ThresholdContainer")
+plugin_container = XMLContainer(
+    "modeler_plugin_container", "ModelerPluginContainer"
+)
+
 
 class ModelerPlugin:
-    id = ''
-    description = ''
-    path = ''
-    meta_type = 'ModelerPlugin'
+    id = ""
+    description = ""
+    path = ""
+    meta_type = "ModelerPlugin"
 
     def getPrimaryPath(self):
-        return self.path.split('/')
+        return self.path.split("/")
 
 
-def print_cdata( content, indent=0 ):
-    print " " * indent + """<![CDATA[%s]]>""" % content
-    
+def print_cdata(content, indent=0):
+    print(" " * indent + """<![CDATA[%s]]>""" % content)
+
 
 def print_xml_tree(tree, indent=0):
-    if '__id' in tree:
-        header = " " * indent + """<%(__meta_type)s id="%(__id)s" location="%(__location)s" """ % tree
-        if '__class' in tree and tree['__class']:
-            header += 'class="%s"' % tree['__class']
-        if '__hasTransform' in tree:
-            header += ' hasTransform="%s"' % tree['__hasTransform']
-        print header + " >"
-        desc = tree['__description']
+    if "__id" in tree:
+        header = (
+            " " * indent
+            + """<%(__meta_type)s id="%(__id)s" location="%(__location)s" """
+            % tree
+        )
+        if "__class" in tree and tree["__class"]:
+            header += 'class="%s"' % tree["__class"]
+        if "__hasTransform" in tree:
+            header += ' hasTransform="%s"' % tree["__hasTransform"]
+        print(header + " >")
+        desc = tree["__description"]
         if desc:
-            print_cdata( desc, indent )
+            print_cdata(desc, indent)
 
     for obj in sorted(tree.keys()):
-        if obj.startswith('__'): continue
-        print_xml_tree(tree[obj], indent + 1 )
+        if obj.startswith("__"):
+            continue
+        print_xml_tree(tree[obj], indent + 1)
 
-    if '__id' in tree:
-        print " " * indent + "</%(__meta_type)s>" % tree
+    if "__id" in tree:
+        print(" " * indent + "</%(__meta_type)s>" % tree)
+
 
 def add_object(root, obj):
     zendocObj = zope.component.queryAdapter(obj, IZenDocProvider)
-    if zendocObj is None: return
-    root['__id'] = obj.id
-    root['__description'] = zendocObj.getZendoc()
-    root['__location'] = '/'.join(obj.getPrimaryPath())
-    root['__meta_type'] = obj.meta_type.replace(' ', '_')
-    root['__class'] = obj.__class__.__name__
-    if obj.__class__.__name__ == 'EventClass':
+    if zendocObj is None:
+        return
+    root["__id"] = obj.id
+    root["__description"] = zendocObj.getZendoc()
+    root["__location"] = "/".join(obj.getPrimaryPath())
+    root["__meta_type"] = obj.meta_type.replace(" ", "_")
+    root["__class"] = obj.__class__.__name__
+    if obj.__class__.__name__ == "EventClass":
         if obj.transform:
-            root['__hasTransform'] = 'yes'
+            root["__hasTransform"] = "yes"
         else:
-            root['__hasTransform'] = 'no'
+            root["__hasTransform"] = "no"
+
 
 def get_modeler_description(path, file):
-    location = path.replace(zenPath(), '')
+    location = path.replace(zenPath(), "")
     # Start from the ZenPack location
-    location = location.split('/')[3:]
-    name = file.replace('.py', '')
+    location = location.split("/")[3:]
+    name = file.replace(".py", "")
     location.append(name)
-    location = '.'.join(location)
-    # Location will be something like 
+    location = ".".join(location)
+    # Location will be something like
     # ZenPacks.zenoss.AixMonitor.modeler.plugins.zenoss.cmd.aix.netstat_na
     try:
         mod = __import__(location, globals(), locals(), name)
         desc = mod.__doc__
-    except:
-        desc = 'Unable to load plugin %s' % location
+    except Exception:
+        desc = "Unable to load plugin %s" % location
     return desc
+
 
 def add_plugin(root, file, path):
     plugin = ModelerPlugin()
-    plugin.id = file.replace('.py', '')
+    plugin.id = file.replace(".py", "")
     plugin.path = path
     plugin.description = get_modeler_description(path, file)
     add_object(root, plugin)
+
 
 def modelerSearch(root, plugin_dir):
     if not os.path.exists(plugin_dir):
@@ -126,18 +136,17 @@ def modelerSearch(root, plugin_dir):
         root = root[loc]
     # Back to sanity. Yay!
     madeOrganizer = False
-    for path, unused, files in os.walk(plugin_dir):
+    for path, _, files in os.walk(plugin_dir):
         for file in files:
-            if not file.endswith('.py') or file == '__init__.py':
+            if not file.endswith(".py") or file == "__init__.py":
                 continue
             if not madeOrganizer:
-                root['Modelers'] = {}
-                new_root = root['Modelers']
+                root["Modelers"] = {}
+                new_root = root["Modelers"]
                 add_object(new_root, plugin_container)
                 madeOrganizer = True
             new_root[file] = {}
             add_plugin(new_root[file], file, path)
-
 
 
 def describeDevClass(obj, tree):
@@ -147,13 +156,13 @@ def describeDevClass(obj, tree):
         if loc not in root:
             root[loc] = {}
             # Graphs don't have their own node
-            if i > 0 and  obj_path[i-1] == 'graphDefs':
-                graph_path = '/'.join(obj_path[:i+1])
+            if i > 0 and obj_path[i - 1] == "graphDefs":
+                graph_path = "/".join(obj_path[: i + 1])
                 graph_obj = dmd.getObjByPath(graph_path)
                 add_object(root[loc], graph_obj)
 
             # Thresholds don't have a container
-            if loc == 'thresholds':
+            if loc == "thresholds":
                 add_object(root[loc], threshie)
 
         root = root[loc]
@@ -161,51 +170,63 @@ def describeDevClass(obj, tree):
 
 
 def getDefaultModelers(dmdObj):
-    defaultDirs = [
-        zenPath('Products', 'DataCollector', 'plugins', 'zenoss'),
-    ]
-    tree = { '':{'zport':{'dmd':{}}}}
+    import Products.DataCollector.plugins.zenoss as _plugins
+
+    defaultDirs = [os.path.dirname(_plugins.__file__)]
+    tree = {"": {"zport": {"dmd": {}}}}
     for dir in defaultDirs:
         modelerSearch(tree, dir)
     print_xml_tree(tree)
 
-_FILTER_CLASSES = (RelationshipBase,ZCatalog)
+
+_FILTER_CLASSES = (RelationshipBase, ZCatalog)
+
 
 def _filter(object):
-    if getattr( object, 'pack', False ) and object.pack() is not None:
+    if getattr(object, "pack", False) and object.pack() is not None:
         return False
-    
+
     for clazz in _FILTER_CLASSES:
         if isinstance(object, clazz):
             return False
 
     return True
 
+
 def processDevClass(dmdObj):
     tree = {}
     describeDevClass(dmdObj, tree)
-    for template in dmdObj.rrdTemplates.getSubObjects( _filter ):
+    for template in dmdObj.rrdTemplates.getSubObjects(_filter):
         describeDevClass(template, tree)
     print_xml_tree(tree)
+
+
 #    for obj in dmdObj.objectValues():
 #        if obj.meta_type == 'DeviceClass':
 #            processDevClass(obj)
 
-def zenpack_header( id, version, author, dependencies ):
-    print "<zenpack id='%s' version='%s' author='%s' dependencies='%s' >" % (
-          id, version, author, dependencies)
+
+def zenpack_header(id, version, author, dependencies):
+    print(
+        "<zenpack id='%s' version='%s' author='%s' dependencies='%s' >"
+        % (id, version, author, dependencies)
+    )
+
 
 def zenpack_trailer():
-    print "</zenpack>"
-    
+    print("</zenpack>")
+
+
 def zenpack2XML(dmd, zp):
-    dependencies = ', '.join( [' '.join([x,y]) for x, y in sorted(zp.dependencies.items()) ] )
-    zenpack_header( zp.id, zp.version, zp.author, dependencies )
+    dependencies = ", ".join(
+        [" ".join([x, y]) for x, y in sorted(zp.dependencies.items())]
+    )
+    zenpack_header(zp.id, zp.version, zp.author, dependencies)
     zendocObj = zope.component.queryAdapter(zp, IZenDocProvider)
     if zendocObj:
         zenpackZendoc = zendocObj.getZendoc()
         if zenpackZendoc:
-            print_cdata( zenpackZendoc )   
+            print_cdata(zenpackZendoc)
 
     # Since the packables aren't arranged hierarchically,
     # we need to build our own tree.
@@ -217,19 +238,19 @@ def zenpack2XML(dmd, zp):
             if loc not in root:
                 root[loc] = {}
                 # Graphs don't have their own node
-                if i > 0 and  obj_path[i-1] == 'graphDefs':
-                    graph_path = '/'.join(obj_path[:i+1])
+                if i > 0 and obj_path[i - 1] == "graphDefs":
+                    graph_path = "/".join(obj_path[: i + 1])
                     graph_obj = dmd.getObjByPath(graph_path)
                     add_object(root[loc], graph_obj)
 
                 # Thresholds don't have a container
-                if loc == 'thresholds':
+                if loc == "thresholds":
                     add_object(root[loc], threshie)
 
             root = root[loc]
         add_object(root, obj)
 
-    modelerPath = zp.path('modeler', 'plugins')
+    modelerPath = zp.path("modeler", "plugins")
     modelerSearch(tree, modelerPath)
 
     # Print out the tree
@@ -238,77 +259,91 @@ def zenpack2XML(dmd, zp):
 
 
 def xml_header():
-    print """<?xml version="1.0" encoding="UTF-8"?>
+    print("""<?xml version="1.0" encoding="UTF-8"?>
 
-"""
+""")
 
-def zenbase_header( export_date ):
-    print """
+
+def zenbase_header(export_date):
+    print(
+        """
 <!-- Base Zenoss information generated on %s -->
 <zenbase >
-"""  % (export_date)
+"""
+        % (export_date)
+    )
 
 
 def zenbase_trailer():
-    print """
+    print("""
 </zenbase>
-"""
+""")
 
-def zenpacks_header( export_date ):
-    print """
+
+def zenpacks_header(export_date):
+    print(
+        """
 <!-- ZenPack information generated on %s -->
 <zenpacks >
-"""  % (export_date)
+"""
+        % (export_date)
+    )
 
 
 def zenpacks_trailer():
-    print """
+    print("""
 </zenpacks>
-"""
+""")
 
-class ZendocScript( ZenScriptBase ):
-    
+
+class ZendocScript(ZenScriptBase):
     def buildOptions(self):
         ZenScriptBase.buildOptions(self)
-        self.parser.add_option( "-z", "--zenpacks", dest="zenpacks",
-                                help="Comma-separated list of ZenPacks to be documented (can include 'Core')" )
+        self.parser.add_option(
+            "-z",
+            "--zenpacks",
+            dest="zenpacks",
+            help="Comma-separated list of ZenPacks to be documented "
+            "(can include 'Core')",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     script = ZendocScript(connect=True)
     dmd = script.dmd
-    zenpackOption = getattr( script.options,'zenpacks', None )
-    if zenpackOption: 
-        zenpack_list = zenpackOption.split(',')
+    zenpackOption = getattr(script.options, "zenpacks", None)
+    if zenpackOption:
+        zenpack_list = zenpackOption.split(",")
     else:
         zenpack_list = []
 
     export_date = datetime.datetime.now()
-    zenpacks_header( export_date )
+    zenpacks_header(export_date)
 
     def doCore(dmd):
-        zenpack_header('Core','Zenoss','None','None')
+        zenpack_header("Core", "Zenoss", "None", "None")
         getDefaultModelers(dmd.Devices)
         processDevClass(dmd.Devices)
         zenpack_trailer()
 
-    def doZenPack(dmd,zp):
-        zenpack2XML(dmd,zp)
+    def doZenPack(dmd, zp):
+        zenpack2XML(dmd, zp)
 
     if not zenpack_list:
         doCore(dmd)
         for zp in dmd.ZenPackManager.packs():
             zenpack2XML(dmd, zp)
     else:
-        if 'Core' in zenpack_list:
+        if "Core" in zenpack_list:
             doCore(dmd)
-        for zenpack in ( zenpackId for zenpackId in zenpack_list if zenpackId != 'Core' ):
+        for zenpack in (
+            zenpackId for zenpackId in zenpack_list if zenpackId != "Core"
+        ):
             try:
-                zenpackOb = dmd.ZenPackManager.packs._getOb( zenpack )
-            except Exception, e:
-                print "Did not find zenpack %s" % zenpack
+                zenpackOb = dmd.ZenPackManager.packs._getOb(zenpack)
+            except Exception:
+                print("Did not find zenpack %s" % zenpack)
                 raise
-            zenpack2XML( dmd, zenpackOb )
+            zenpack2XML(dmd, zenpackOb)
 
     zenpacks_trailer()
-

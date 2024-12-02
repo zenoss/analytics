@@ -1,0 +1,8 @@
+exclude gitflow-branch-config jenkins_build.sh .gitignore .clocignore
+include package_version
+include src/Products/ZenUI3/browser/resources/deploy/*
+recursive-exclude src/Products/ZenModel/migrate/tests *
+recursive-exclude bdd *
+recursive-exclude tests *
+recursive-exclude etc *
+recursive-exclude share *

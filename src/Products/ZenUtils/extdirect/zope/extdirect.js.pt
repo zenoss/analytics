@@ -1,0 +1,5 @@
+/* 
+ * This script is generated on the fly by the extdirect viewlet manager defined
+ * in Products/ZenUtils/extdirect/zope/configure.zcml.
+ */
+<tal:block tal:content="structure provider:extdirect"/>

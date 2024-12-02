@@ -1,0 +1,35 @@
+#!/bin/bash
+
+ZENHOME=/opt/zenoss
+SITEPACKAGES=$ZENHOME/lib/python2.7/site-packages
+
+# Fixup LDAPAuthenticator ZenPack dependencies
+for pkgname in LDAPMultiPlugins LDAPUserFolder MemcachedManager; do
+	if [ -d $ZENHOME/Products/${pkgname} ]; then
+		mv $ZENHOME/Products/${pkgname} $SITEPACKAGES/Products/
+	fi
+done
+
+# Remove $ZENHOME/Products and the dev-mode Zenoss package files
+if [ -d $ZENHOME/Products ]; then
+	rm -rf $ZENHOME/Products $ZENHOME/Zenoss.egg-info $SITEPACKAGES/Zenoss-nspkg.pth
+	echo Removed prior dev-mode 'Zenoss' package artifacts
+else
+	echo Old 'Zenoss' package artifacts already removed
+fi
+
+MARIADB_HC=$ZENHOME/bin/healthchecks/mariadb_answering
+MYSQLMETRICS=$ZENHOME/bin/metrics/mysqlmetrics.sh
+
+for script in $MARIADB_HC $MYSQLMETRICS; do
+	if [ -f $script ]; then
+		if grep -q "/opt/zenoss/Products" $script; then
+			sed -i -e 's/Products\/ZenUtils\/ZenDB.py/bin\/zendb/' $script
+			echo Fixed $script
+		else
+			echo No fix needed for $script
+		fi
+	else
+		echo warning: script not found: $script
+	fi
+done

@@ -7,9 +7,8 @@ Products/ZenUI3/node_modules
 
 dist
 build
-Zenoss.egg-info
-lib/python2.7/site-packages/Zenoss-nspkg.pth
-lib/python2.7/site-packages/Zenoss.egg-link
+package_version
+src/zenoss.egg-info
 
 .idea/
 *.iml

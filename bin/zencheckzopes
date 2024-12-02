@@ -8,19 +8,16 @@
 # 
 ##############################################################################
 
-
-if [ -z "$ZENHOME" ] ; then
-    echo ERROR: '$ZENHOME' is not set.
-    echo This is usually caused by executing this command as root rather than \
+if [ -z "$ZENHOME" ]; then
+	echo ERROR: '$ZENHOME' is not set.
+	echo This is usually caused by executing this command as root rather than \
 as the zenoss user.  Either define '$ZENHOME' or run this command as a \
 different user.
 else
-    . $ZENHOME/bin/zenfunctions
+	. $ZENHOME/bin/zenfunctions
 	if [ -z "$CMD" ]; then
-    	$PYTHON $ZENHOME/Products/ZenUtils/requestlogging/ZenCheckZopesAssignments.py 
-    else
-    	$PYTHON $ZENHOME/Products/ZenUtils/requestlogging/ZenCheckZopesAssignments.py "$CMD" $*
+		$PYTHON $ZENHOME/Products/ZenUtils/requestlogging/ZenCheckZopesAssignments.py 
+	else
+		$PYTHON $ZENHOME/Products/ZenUtils/requestlogging/ZenCheckZopesAssignments.py "$CMD" $*
 	fi
-    
 fi
-

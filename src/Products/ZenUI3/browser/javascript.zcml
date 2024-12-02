@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   xmlns:five="http://namespaces.zope.org/five">
+
+
+   <browser:viewlet
+      name="firefox-compat"
+      weight="1"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.FireFoxExtCompat"
+      permission="zope2.Public"
+      />
+
+   <browser:viewlet
+      name="extjs-all"
+      weight="2"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.ExtAllJs"
+      permission="zope2.Public"
+      />
+
+
+   <browser:viewlet
+      name="swfobject"
+      weight="4"
+      manager=".interfaces.IJavaScriptSrcManager"
+      permission="zope2.Public"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      paths="/++resource++zenui/js/swfobject/2.2/swfobject.js"
+      />
+
+
+   <browser:viewlet
+      name="visualization-library"
+      weight="4"
+      manager=".interfaces.IJavaScriptSrcManager"
+      permission="zope2.Public"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      paths="/static/performance/query/visualization.js"
+      />
+
+
+   <browser:viewlet
+      name="visualizationinit"
+      weight="5"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.VisualizationInit"
+      permission="zope2.Public"
+      />
+
+
+   <browser:viewlet
+      name="Ext-extensions"
+      weight="3"
+      manager=".interfaces.IJavaScriptSrcManager"
+      permission="zope2.Public"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      paths="/++resource++extjs/examples/ux/form/MultiSelect.js
+             /++resource++extjs/examples/ux/form/ItemSelector.js
+             /++resource++extjs/examples/ux/IFrame.js
+             /++resource++extjs/examples/ux/RowExpander.js
+             /++resource++extjs/examples/ux/CheckColumn.js"              
+      />
+
+   <browser:viewlet
+      name="timezone-support"
+      weight="3"
+      manager=".interfaces.IJavaScriptSrcManager"
+      permission="zope2.Public"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      paths="/++resource++zenui/js/timezone/moment.min.js
+             /++resource++zenui/js/timezone/moment-timezone-with-data.min.js
+             /++resource++zenui/js/timezone/jstz.js"
+      />
+
+
+   <browser:viewlet
+      name="js-all"
+      weight="4"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.ExtDirectViewlet"
+      permission="zope2.Public"
+      path="/zport/dmd/extdirect.js"
+      />
+
+   <browser:viewlet
+      name="zenoss-all"
+      weight="5"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.ZenossAllJs"
+      permission="zope2.Public"
+      />
+
+   <browser:viewlet
+      name="i18njs"
+      weight="6"
+      manager=".interfaces.IJavaScriptSrcManager"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      permission="zope2.Public"
+      paths="/zport/dmd/i18n.js"
+      />
+
+   <browser:viewlet
+      name="xtracelibraries"
+      weight="1"
+      manager=".interfaces.IXTraceSrcManager"
+      permission="zope2.Public"
+      class=".javascript.JavaScriptSrcBundleViewlet"
+      paths="/++resource++zenui/js/dagre/lib/d3/d3.v3.min.js
+             /++resource++zenui/js/dagre/lib/jQuery/jquery-1.9.0.js
+             /++resource++zenui/js/dagre/lib/jQuery/jquery.tipsy.js
+             /++resource++zenui/js/dagre/lib/jQuery/jquery.contextMenu.js
+             /++resource++zenui/js/dagre/lib/dagre/dagre.js
+             /++resource++zenui/js/dagre/js/Minimap.js
+             /++resource++zenui/js/dagre/js/MinimapZoom.js
+             /++resource++zenui/js/dagre/js/DirectedAcyclicGraph.js
+             /++resource++zenui/js/dagre/js/Graph.js
+             /++resource++zenui/js/dagre/js/Tooltip.js
+             /++resource++zenui/js/dagre/js/ContextMenu.js"
+      />
+
+</configure>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five">
+
+   <browser:page
+       name="zenui"
+       for="*"
+       class=".resources.ZenUIResourcesShortcut"
+       permission="zope2.Public"
+       />
+
+   <browser:page
+       name="extjs"
+       for="*"
+       class=".resources.ExtJSShortcut"
+       permission="zope2.Public"
+       />
+
+   <browser:page
+       name="zenoss-all.js"
+       for="*"
+       class=".resources.ZenossJavaScript"
+       permission="zope2.Public"
+       />
+
+   <browser:page
+           name="PIE.htc"
+           for="*"
+           class=".resources.PIEdotHTC"
+           permission="zope2.Public"
+           />
+
+</configure>

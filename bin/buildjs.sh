@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ##############################################################################
 # 
 # Copyright (C) Zenoss, Inc. 2010, all rights reserved.
@@ -9,6 +9,6 @@
 ##############################################################################
 
 JSBUILDER=$ZENHOME/share/java/sencha_jsbuilder-2/JSBuilder2.jar
-JSHOME=$DESTDIR$ZENHOME/Products/ZenUI3/browser
+JSHOME=$(python -c "import importlib_resources; print importlib_resources.files('Products.ZenUI3.browser').as_posix()")
 java -jar $JSBUILDER -p $JSHOME/zenoss.jsb2 -d $JSHOME -v
 exit $?

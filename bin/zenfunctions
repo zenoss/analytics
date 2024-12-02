@@ -7,7 +7,6 @@
 # 
 ##############################################################################
 
-
 # Bitrock installer sets the following variables properly for the stack
 # in setenv.sh.  Avoid undoing that goodness.
 # NB: This should probably be refactored per MT's idea of generalizing
@@ -233,38 +232,58 @@ stats() {
 
 }
 
+startswith() { case $2 in $1*) return 0;; *) return 1;; esac; }
+
+fix_prghome() {
+	if startswith "$ZENHOME/Products" "$PRGHOME"; then
+		PRODUCT_MODULE=$(echo "$PRGHOME" | cut -d'/' -f4- | tr '/' '.')
+		CMD_MODULE=$(echo "$PRGNAME" | cut -d'.' -f1)
+		PRGHOME=$(python -c "from $PRODUCT_MODULE import $CMD_MODULE; print($CMD_MODULE.__file__.rsplit('/', 1)[0])")
+	fi
+}
+
 generic() {
     case "$CMD" in
       run)
+	  	fix_prghome
 	    run "$@"
 	    ;;
       start)
+	  	fix_prghome
 	    start "$@"
 	    ;;
       stop)
+	  	fix_prghome
 	    stop
 	    ;;
       restart)
+	  	fix_prghome
 	    restart "$@"
 	    ;;
       status)
+	  	fix_prghome
 	    status
 	    ;;
       help)
+	  	fix_prghome
 	    help
 	    ;;
       genconf)
+	  	fix_prghome
 	    genconf
 	    ;;
       genxmlconfigs)
+	  	fix_prghome
 	    genxmlconfigs
 	    ;;
       debug)
+	  	fix_prghome
 	    debug "$@"
 	    ;;
       stats)
-            stats "$@"
-            ;;
+	  	fix_prghome
+		stats "$@"
+		;;
       *)
 	    cat - <<HELP
 Usage: $0 {run|start|stop|restart|status|help|genconf|genxmlconfigs|debug|stats} [options]

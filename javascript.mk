@@ -1,63 +1,57 @@
 #
 # Makefile for Zenoss Javascript files
 #
-# Approximately 100+ individaul zenoss javascript files are compressed into
+# Approximately 100+ individual zenoss javascript files are compressed into
 # a single 'minified' file using a Sencha tool called JSBuilder. The
 # minification process is orchestrated by a json-structured jsb2 build
 # file:
 #
-#                                                +--------------+
-# Products/ZenUI3/browser/zenoss.jsb2 ---------->|    sencha    |
-# Products/ZenUI3/browser/resources/js/*/*.js -->|   minifier   |-->zenoss-compiled.js
-#                                                |--------------|
-#                                                |JSBuilder2.jar|
-#                                                +--------------+
+#                                                   +--------------+
+# Products/ZenUI3/browser/resources/builder.jsb2 -->|    sencha    |
+# Products/ZenUI3/browser/resources/js/*/*.js ----->|   minifier   |-->zenoss-compiled.js
+#                                                   |--------------|
+#                                                   |JSBuilder2.jar|
+#                                                   +--------------+
 #
 # The jsb2 file defines the output file (e.g. zenoss-compiled.js) and the
 # output directory (e.g. resources/js/deploy), so we parse the jsb2 file to
 # get those settings.
 #---------------------------------------------------------------------------#
 
-JS_BASEDIR     = Products/ZenUI3/browser
-JSB_FILE       = $(JS_BASEDIR)/zenoss.jsb2
-JS_SRC_BASEDIR = $(JS_BASEDIR)/resources/js
+JS_BASEDIR = src/Products/ZenUI3/browser/resources
+JSB_FILE   = $(JS_BASEDIR)/builder.jsb2
 
 #
-# JSB_COMPILED_JS_NAME - the output filename from the jsb2 file; e.g. "zenoss-compiled.js"
+# JS_DEPLOYPATH - the output directory relative to the repo root;
+# e.g. src/Products/ZenUI3/browser/resources/deploy
 #
-JSB_COMPILED_JS_NAME = $(shell grep '"file":' $(JSB_FILE) | awk '{print $$2}' | tr -d [\",])
+JS_DEPLOYPATH = $(JS_BASEDIR)/$(shell python2 -c "import json; print json.load(open('$(JSB_FILE)'))['deployDir']")
 
-#
-# JSB_DEPLOY_DIR - the output directory name from the jsb2 file; e.g. "resources/js/deploy"
-#
-JSB_DEPLOY_DIR = $(shell grep '"deployDir":' $(JSB_FILE) | awk '{print $$2}' | tr -d [\",])
+# BUILDJS - path to the `buildjs` command
+BUILDJS = $(shell which buildjs)
 
-#
-# JS_OUTPUT_DIR - the output directory relative to the repo root;
-# e.g. Products/ZenUI3/browser/resources/js/deploy
-#
-JS_OUTPUT_DIR = $(JS_BASEDIR)/$(JSB_DEPLOY_DIR)
+ifeq ($(BUILDJS),)
+$(error The buildjs command not found. Please install the jsbuilder package.)
+endif
 
-# JSBUILDER - the path to the JSBuilder jar in the runtime image
-JSBUILDER = /opt/zenoss/share/java/sencha_jsbuilder-2/JSBuilder2.jar
-
-JSBUILD_COMMAND = java -jar $(JSBUILDER) -p $(JSB_FILE) -d $(JS_BASEDIR) -v
+BUILDJS_COMMAND = buildjs -d $(JS_BASEDIR)
 
 # Dependencies for compilation
-JSB_SOURCES = $(shell python2 -c "import json, sys, os.path; d=sys.stdin.read(); p=json.loads(d)['pkgs'][0]['fileIncludes']; print ' '.join(os.path.join('$(JS_BASEDIR)', e['path'], e['text']) for e in p)" < $(JSB_FILE))
-JSB_TARGETS = $(JS_OUTPUT_DIR)/zenoss-compiled.js $(JS_OUTPUT_DIR)/zenoss-compiled-debug.js
+JSB_SOURCES = $(shell python2 -c "import json, os.path; print ' '.join(os.path.join('$(JS_BASEDIR)', e['path'], e['text']) for e in json.load(open('$(JSB_FILE)'))['pkgs'][0]['fileIncludes'])")
+
+JSB_TARGETS = $(JS_DEPLOYPATH)/zenoss-compiled.js $(JS_DEPLOYPATH)/zenoss-compiled-debug.js
 
 .PHONY: build-javascript
 build-javascript: $(JSB_TARGETS)
 
 .PHONY: clean-javascript
 clean-javascript:
-	@-rm -vrf $(JS_OUTPUT_DIR)
+	@-rm -vrf $(JS_DEPLOYPATH)
 
 $(JSB_TARGETS): $(JSB_SOURCES)
-	@echo "Minifying $(JS_SRC_BASEDIR) -> $@"
+	@echo "Minifying $(JS_BASEDIR)/js -> $@"
 ifeq ($(DOCKER),)
-	$(JSBUILD_COMMAND)
+	$(BUILDJS_COMMAND)
 else
-	$(DOCKER_USER) $(JSBUILD_COMMAND)
+	$(DOCKER_USER) $(BUILDJS_COMMAND)
 endif

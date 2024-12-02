@@ -1,0 +1,466 @@
+<?xml version="1.0"?>
+<!--
+##############################################################################
+#
+# Copyright (C) Zenoss, Inc. 2009, all rights reserved.
+#
+# This content is made available according to terms specified in
+# License.zenoss under the directory where your Zenoss product is installed.
+#
+##############################################################################
+-->
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five">
+
+   <include package="zenoss.extjs"/>
+   <include file="backcompat.zcml"/>
+   <include file="resources.zcml"/>
+   <include file="macros.zcml"/>
+   <include file="navigation.zcml"/>
+   <include file="javascript.zcml"/>
+   <include file="security.zcml"/>
+
+   <!--
+   <include file="screentypes.zcml"/>
+   -->
+
+   <browser:page
+       for="*"
+       name="index.html"
+       class=".ErrorMessage"
+       permission="zope2.Public"
+       />
+
+
+   <interface
+       interface="..navigation.interfaces.IZenossNav"
+       type="zope.publisher.interfaces.browser.IBrowserSkinType"
+       name="zenossSkin"
+       />
+
+   <browser:defaultSkin name="zenossSkin"/>
+
+   <!-- registers the etag adapter -->
+   <include package="zope.browserresource" />
+
+   <!-- Viewlet manager for generic snippets -->
+   <browser:viewletManager
+       name="jssnippets"
+       provides=".interfaces.IMainSnippetManager"
+       class=".javascript.MainSnippetManager"
+       permission="zope2.Public"
+       />
+
+   <!-- Viewlet manager for javascript src includes -->
+   <browser:viewletManager
+       name="all-js"
+       provides=".interfaces.IJavaScriptSrcManager"
+       class=".javascript.JavaScriptSrcManager"
+       permission="zope2.Public"
+       />
+
+   <browser:viewletManager
+       name="xtrace-js"
+       provides=".interfaces.IXTraceSrcManager"
+       class=".javascript.XTraceSrcManager"
+       permission="zope2.Public"
+       />
+
+   <browser:viewletManager
+       name="all-css"
+       provides=".interfaces.ICSSSrcManager"
+       class=".javascript.CSSSrcManager"
+       permission="zope2.Public"
+       />
+
+
+   <!-- Viewlet manager for javascript src includes -->
+   <browser:viewletManager
+       name="head-extra"
+       provides=".interfaces.IHeadExtraManager"
+       class=".resources.HeadExtraManager"
+       permission="zope2.Public"
+       />
+
+
+   <!--
+   <browser:defaultView
+       for="OFS.interfaces.IApplication"
+       name="redirect"
+       />
+
+   <browser:page
+       for="*"
+       name="redirect"
+       permission="zope2.Public"
+       class=".MainPageRedirect"
+       />
+   -->
+
+   <browser:resourceDirectory
+       name="zenui"
+       directory="resources"
+       />
+
+
+   <browser:page
+       template="templates/base-new.pt"
+       name="nocview"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/base-new.pt"
+       name="evhistory"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/base-new.pt"
+       name="notifications"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       class=".pages.ITInfrastructure"
+       name="itinfrastructure"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       class=".testing.UserInterfaceTests"
+       name="uitests"
+       for="Products.ZenModel.interfaces.IDataRoot"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       name="export_devices"
+       class=".device_export.DeviceExporter"
+       for="*"
+       permission="zope2.Public"
+       />
+
+   <browser:page
+       class=".pages.DeviceDetails"
+       name="devicedetail"
+       for="Products.ZenModel.Device.Device"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/network.pt"
+       name="networks"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/eventclasses.pt"
+       name="eventclasses"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/manufacturers.pt"
+       name="manufacturers"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/process.pt"
+       name="process"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       class=".pages.DaemonsView"
+       name="daemons"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/collectortemplate.pt"
+       name="collectorTemplate"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/ipservice.pt"
+       name="ipservice"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/winservice.pt"
+       name="winservice"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/networkMap.pt"
+       name="networkMap"
+       for="*"
+       permission="zenoss.View"
+       />
+
+
+   <browser:page
+       template="templates/reports.pt"
+       name="reports"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       template="templates/joblist.pt"
+       name="joblist"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       template="templates/mibs.pt"
+       name="mibs"
+       for="*"
+       permission="zenoss.View"
+       />
+
+   <browser:page
+       template="templates/triggers.pt"
+       name="triggers"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       template="templates/quickstart.pt"
+       name="quickstart"
+       for="Products.ZenModel.interfaces.IDataRoot"
+       permission="zenoss.ManageDMD"
+       />
+
+   <browser:page
+       template="templates/base-new.pt"
+       name="users"
+       for="*"
+       permission="zope2.Public"
+       />
+
+   <browser:page
+       template="templates/template.pt"
+       name="template"
+       for="*"
+       permission="zenoss.ManageDMD"
+       />
+
+   <browser:page
+       class=".command.CommandView"
+       name="run_command"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       class=".command.BackupView"
+       name="run_backup"
+       for="*"
+       permission="zenoss.ManageDMD"
+       />
+
+   <browser:page
+       class=".command.ModelView"
+       name="run_model"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.ModelDebugView"
+       name="run_model_debug"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.MonitorView"
+       name="run_monitor"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.MonitorDebugView"
+       name="run_monitor_debug"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.GroupModelView"
+       name="group_model"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.GroupModelDebugView"
+       name="group_model_debug"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.GroupMonitorView"
+       name="group_monitor"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.GroupMonitorDebugView"
+       name="group_monitor_debug"
+       for="*"
+       permission="zenoss.ManageDevice"
+       />
+
+   <browser:page
+       class=".command.MonitorDatasource"
+       name="monitor_datasource"
+       for="Products.ZenModel.RRDDataSource.RRDDataSource"
+       permission="zenoss.RunCommands"
+       />
+
+   <browser:page
+       template="templates/graphs.pt"
+       name="graphs"
+       permission="zenoss.View"
+       for="Products.ZenModel.DeviceComponent.DeviceComponent"
+       />
+
+   <browser:view
+       class="..security.authorization.Authorization"
+       name="authorization"
+       for="OFS.interfaces.IApplication"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class="..security.authorization.Login"
+       name="login"
+       for="zope.publisher.interfaces.browser.IBrowserView"
+       permission="zope2.Public"
+       />
+
+
+   <browser:view
+       class="..security.authorization.Validate"
+       name="validate"
+       for="zope.publisher.interfaces.browser.IBrowserView"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class=".views.FileUpload"
+       name="uploadfile"
+       for="*"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class=".views.Robots"
+       name="robots.txt"
+       for="OFS.interfaces.IApplication"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class=".views.GotoRedirect"
+       name="goto"
+       for="Products.ZenModel.interfaces.IDataRoot"
+       permission="zenoss.Common"
+       />
+
+   <browser:view
+       class=".graphs.ExportGraph"
+       name="exportGraph"
+       for="Products.ZenModel.interfaces.IDataRoot"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       template="templates/viewGraph.pt"
+       name="viewGraph"
+       for="*"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       class=".views.GetDaemonLogs"
+       name="getDaemonLogs"
+       for="Products.ZenModel.interfaces.IDataRoot"
+       permission="zenoss.Common"
+       />
+
+   <browser:page
+       template="templates/localDocumentation.pt"
+       name="localDocumentation"
+       for="*"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class=".views.GetDoc"
+       name="getDoc"
+       for="*"
+       permission="zope2.Public"
+       />
+
+   <browser:view
+       class=".views.NginxStaticLocationBlocks"
+       name="nginx_static"
+       for="OFS.interfaces.IApplication"
+       permission="zope2.Public"
+       />
+
+   <browser:viewlet
+       name="zenoss_settings"
+       manager=".interfaces.IMainSnippetManager"
+       class=".javascript.ZenossSettings"
+       permission="zope2.Public"
+       />
+
+   <browser:viewlet
+       name="zenoss_data"
+       weight="3"
+       manager=".interfaces.IJavaScriptSrcManager"
+       class=".javascript.ZenossData"
+       permission="zope2.Public"
+       />
+
+   <browser:viewlet
+       name="browser_state"
+       manager=".interfaces.IMainSnippetManager"
+       class=".javascript.BrowserState"
+       permission="zope2.Public"
+       />
+
+   <include package=".eventconsole"/>
+   <include package=".search"/>
+   <include package=".stats"/>
+   <include package=".modelapi"/>
+
+</configure>

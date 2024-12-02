@@ -8,4 +8,4 @@
 #
 ##############################################################################
 
-su - zenoss -c '/opt/zenoss/bin/python /opt/zenoss/Products/ZenUtils/ZenDB.py --usedb zodb --execsql=";"'
+su - zenoss -c '/opt/zenoss/bin/python /opt/zenoss/bin/zendb --usedb zodb --execsql=";"'

@@ -1,5 +1,0 @@
-/* 
- * This script is generated on the fly by the jsonapi viewlet manager defined
- * in $ZENHOME/Products/ZenUtils/extdirect/zope/configure.zcml.
- */
-<tal:block tal:content="structure provider:jsonapi"/>

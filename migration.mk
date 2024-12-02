@@ -1,7 +1,7 @@
-MIGRATE_VERSION = Products/ZenModel/ZMigrateVersion.py
+MIGRATE_VERSION = src/Products/ZenModel/ZMigrateVersion.py
 
 # The SCHEMA_* values define the DB schema version used for upgrades.
-# See the topic "Managing Migrate.Version" in Products/ZenModel/migrate/README.md
+# See the topic "Managing Migrate.Version" in src/Products/ZenModel/migrate/README.md
 # for more information about setting these values.
 
 pick_version_part = $(word $(1),$(subst ., ,$(2)))
@@ -19,8 +19,6 @@ clean-migration:
 .PHONY: generate-zversion
 generate-zversion: generate-zmigrateversion
 
-# See the topic "Managing Migrate.Version" in Products/ZenModel/migrate/README.md
-# for more information about setting the SCHEMA_* values.
 .PHONY: generate-zmigrateversion
 generate-zmigrateversion: $(MIGRATE_VERSION)
 
@@ -39,7 +37,7 @@ replace-zmigrateversion:
 	@echo Replacing SCHEMA_MAJOR with $(SCHEMA_MAJOR)
 	@echo Replacing SCHEMA_MINOR with $(SCHEMA_MINOR)
 	@echo Replacing SCHEMA_REVISION with $(SCHEMA_REVISION)
-	@cd Products/ZenModel/migrate; \
+	@cd src/Products/ZenModel/migrate; \
 	    for file in `grep -l ZMigrateVersion *.py`; do \
 	        sed \
 	            -i \
@@ -50,7 +48,7 @@ replace-zmigrateversion:
 	            $$file; \
 	    done
 
-SCHEMA_FOUND = $(shell grep Migrate.Version Products/ZenModel/migrate/*.py  | grep SCHEMA_ | cut -f1 -d':')
+SCHEMA_FOUND = $(shell grep Migrate.Version src/Products/ZenModel/migrate/*.py  | grep SCHEMA_ | cut -f1 -d':')
 
 # The target verify-explicit-zmigrateversion should be invoked as a first step in all release
 # builds to verify that all of the SCHEMA_* variables were replaced with an actual numeric value.
@@ -59,7 +57,7 @@ verify-explicit-zmigrateversion:
 ifeq ($(SCHEMA_FOUND),)
 	@echo "Good - no SCHEMA_* variables found: $(SCHEMA_FOUND)"
 else
-	$(info Some SCHEMA_* variables found in Products/ZenModel/migrate/*.py:)
+	$(info Some SCHEMA_* variables found in src/Products/ZenModel/migrate/*.py:)
 	$(info )
 	$(foreach item,$(SCHEMA_FOUND),$(info $(item)))
 	$(info )

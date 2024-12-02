@@ -1,0 +1,267 @@
+{
+    "projectName": "Zenoss",
+    "deployDir": "deploy",
+    "licenseText": "Copyright (c) 2009-2011 Zenoss, Inc.\n\nThis program is free software; you can redistribute it and/or\nmodify it under the terms of the GNU General Public License\nversion 2 as published by the Free Software Foundation.\n\nFor complete information please visit http://www.zenoss.com/oss/",
+    "pkgs": [{
+        "name": "Zenoss Application",
+        "file": "zenoss-compiled.js",
+        "isDebug": false,
+        "fileIncludes": [{
+            "text": "ExtOverrides.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "flares.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "zenoss.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "date.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "BaseGrid.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Security.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Action.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Types.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Renderers.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "FlexButton.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "i18n.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Tooltips.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "vtypes.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "HistoryManager.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "Editable.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "FieldRow.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "InheritField.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "zprop.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "IDField.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "DialogWindow.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "DataSourceEditDialog.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "Tree.js",
+            "path": "js/zenoss/model/"
+        },{
+            "text": "Basic.js",
+            "path": "js/zenoss/model/"
+        }, {
+            "text": "HierarchyTreePanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "SearchField.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "LinkField.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "BaseDetailForm.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "AutoFormPanel.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "DevicePanels.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "EventPanels.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "InstancePanels.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "CardButtonPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "ContextCardButtonPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "TemplateTreePanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "DeviceFields.js",
+            "path": "js/zenoss/form/"
+        }, {
+            "text": "datasource.js",
+            "path": "js/zenoss/monitoringTemplates/"
+        }, {
+            "text": "threshold.js",
+            "path": "js/zenoss/monitoringTemplates/"
+        }, {
+            "text": "graph.js",
+            "path": "js/zenoss/monitoringTemplates/"
+        }, {
+            "text": "container.js",
+            "path": "js/zenoss/monitoringTemplates/"
+        }, {
+            "text": "FooterBar.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "IpAddressField.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "SubselectionPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "BackCompatPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "CommandWindow.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "DeviceOverviewPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "DeviceDetailBar.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "ConsoleBar.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "AddToZenPackWindow.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "VerticalBrowse.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "ComponentPanel.js",
+            "path": "js/zenoss/"
+        }, {
+            "text": "EventAction.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "Severity.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "EventClass.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "DataPointItemSelector.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "ContextMenu.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "parser.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "rrdtype.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "Password.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "UpDownField.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "alias.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "TwoColumnTextArea.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "MultiLineDisplayField.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "inspector.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "RuleBuilder.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "eventDetail.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "triggersComponents.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "SettingsGrid.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "organizerdropdown.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "modelerPluginPanel.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "configPropertyPanel.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "graphPanel.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "DateDisplayField.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "ComponentGraphPanel.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "componentTemplate.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "LockForm.js",
+            "path": "js/zenoss/dialog/"
+        },{
+            "text": "ExampleTextField.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "SoftwarePanel.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "CustomPropertyPanel.js",
+            "path": "js/zenoss/form/"
+        },{
+            "text": "JobsWidget.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "Administration.js",
+            "path": "js/zenoss/devicemanagement/"
+        },{
+            "text": "OverriddenObjects.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "PageStatistics.js",
+            "path": "js/zenoss/"
+        },{
+            "text": "ClassPanels.js",
+            "path": "js/zenoss/eventclasses/"
+        },{
+            "text": "ManufacturersPanels.js",
+            "path": "js/zenoss/manufacturers/"
+        },{
+            "text": "joblogdialog.js",
+            "path": "js/zenoss/"
+        }]
+    }],
+    "resources": []
+}

@@ -1,100 +1,116 @@
 #!/usr/bin/env python
 
-__doc__ = """zendoc_base
+"""zendoc_base
 
 Create an XML file showing the items in Zenoss.
 This should be run on a fresh install of Zenoss with
 no ZenPacks installed.
 """
 
+from __future__ import absolute_import, print_function
+
 import os
 import os.path
 import datetime
 
 from Products.ZenUtils.ZenScriptBase import ZenScriptBase
-from Products.ZenUtils.Utils import importClass, zenPath
-from transaction import commit
+from Products.ZenUtils.Utils import zenPath
+
 
 class XMLContainer:
-    id = ''
-    description = ''
-    path = ''
-    meta_type = ''
+    id = ""
+    description = ""
+    path = ""
+    meta_type = ""
 
-    def __init__(self, id='', meta_type=''):
+    def __init__(self, id="", meta_type=""):
         self.id = id
         self.meta_type = meta_type
 
     def getPrimaryPath(self):
         return self.path
 
-threshie = XMLContainer('threshold', 'ThresholdContainer')
-plugin_container = XMLContainer('modeler_plugin_container',
-                                'ModelerPluginContainer')
+
+threshie = XMLContainer("threshold", "ThresholdContainer")
+plugin_container = XMLContainer(
+    "modeler_plugin_container", "ModelerPluginContainer"
+)
+
 
 class ModelerPlugin:
-    id = ''
-    description = ''
-    path = ''
-    meta_type = 'ModelerPlugin'
+    id = ""
+    description = ""
+    path = ""
+    meta_type = "ModelerPlugin"
 
     def getPrimaryPath(self):
-        return self.path.split('/')
+        return self.path.split("/")
 
 
 def print_xml_tree(tree, indent=0):
-    if '__id' in tree:
-        header = " " * indent + """<%(__meta_type)s id="%(__id)s" location="%(__location)s" """ % tree
-        if '__class' in tree and tree['__class']:
-            header += 'class="%s"' % tree['__class']
-        if '__hasTransform' in tree:
-            header += ' hasTransform="%s"' % tree['__hasTransform']
-        print header + " >"
-        desc = tree['__description']
+    if "__id" in tree:
+        header = (
+            " " * indent
+            + """<%(__meta_type)s id="%(__id)s" location="%(__location)s" """
+            % tree
+        )
+        if "__class" in tree and tree["__class"]:
+            header += 'class="%s"' % tree["__class"]
+        if "__hasTransform" in tree:
+            header += ' hasTransform="%s"' % tree["__hasTransform"]
+        print(header + " >")
+        desc = tree["__description"]
         if desc:
-            print " " * indent + """<![CDATA[%s]]>""" % desc
+            print(" " * indent + """<![CDATA[%s]]>""" % desc)
 
     for obj in sorted(tree.keys()):
-        if obj.startswith('__'): continue
-        print_xml_tree(tree[obj], indent + 1 )
+        if obj.startswith("__"):
+            continue
+        print_xml_tree(tree[obj], indent + 1)
 
-    if '__id' in tree:
-        print " " * indent + "</%(__meta_type)s>" % tree
+    if "__id" in tree:
+        print(" " * indent + "</%(__meta_type)s>" % tree)
+
 
 def add_object(root, obj):
-    root['__id'] = obj.id
-    root['__description'] = obj.description
-    root['__location'] = '/'.join(obj.getPrimaryPath())
-    root['__meta_type'] = obj.meta_type
-    root['__class'] = obj.__class__.__name__
-    if obj.__class__.__name__ == 'EventClass':
+    root["__id"] = obj.id
+    root["__description"] = obj.description
+    root["__location"] = "/".join(obj.getPrimaryPath())
+    root["__meta_type"] = obj.meta_type
+    root["__class"] = obj.__class__.__name__
+    if obj.__class__.__name__ == "EventClass":
         if obj.transform:
-            root['__hasTransform'] = 'yes'
+            root["__hasTransform"] = "yes"
         else:
-            root['__hasTransform'] = 'no'
+            root["__hasTransform"] = "no"
+
 
 def get_modeler_description(path, file):
-    location = path.replace(zenPath(), '').replace('/', '', 1).replace('/', '.')
-    name = file.replace('.py', '')
-    location += '.' + name
+    location = (
+        path.replace(zenPath(), "").replace("/", "", 1).replace("/", ".")
+    )
+    name = file.replace(".py", "")
+    location += "." + name
     try:
         mod = __import__(location, globals(), locals(), name)
         desc = mod.__doc__
-    except:
-        desc = 'Unable to load plugin %s' % location
+    except Exception:
+        desc = "Unable to load plugin %s" % location
     return desc
+
 
 def add_plugin(root, file, path):
     plugin = ModelerPlugin()
-    plugin.id = file.replace('.py', '')
+    plugin.id = file.replace(".py", "")
     plugin.path = path
     plugin.description = get_modeler_description(path, file)
     add_object(root, plugin)
 
+
 def modelerSearch(root, plugin_dir):
     if not os.path.exists(plugin_dir):
         return
-    
+
     # Yes, you're right -- the following should be equivalent
     # root = root['']['zport']['dmd']
     #  But it's not.  Move along.
@@ -106,13 +122,13 @@ def modelerSearch(root, plugin_dir):
         root = root[loc]
     # Back to sanity. Yay!
     madeOrganizer = False
-    for path, unused, files in os.walk(plugin_dir):
+    for path, _, files in os.walk(plugin_dir):
         for file in files:
-            if not file.endswith('.py') or file == '__init__.py':
+            if not file.endswith(".py") or file == "__init__.py":
                 continue
             if not madeOrganizer:
-                root['Modelers'] = {}
-                new_root = root['Modelers']
+                root["Modelers"] = {}
+                new_root = root["Modelers"]
                 add_object(new_root, plugin_container)
                 madeOrganizer = True
             new_root[file] = {}
@@ -120,9 +136,13 @@ def modelerSearch(root, plugin_dir):
 
 
 def zenpack2XML(dmd, zp):
-    dependencies = ', '.join( [' '.join([x,y]) for x, y in sorted(zp.dependencies.items()) ] )
-    print "<zenpack id='%s' version='%s' author='%s' dependencies='%s' >" % (
-          zp.id, zp.version, zp.author, dependencies)
+    dependencies = ", ".join(
+        [" ".join([x, y]) for x, y in sorted(zp.dependencies.items())]
+    )
+    print(
+        "<zenpack id='%s' version='%s' author='%s' dependencies='%s' >"
+        % (zp.id, zp.version, zp.author, dependencies)
+    )
 
     # Since the packables aren't arranged hierarchically,
     # we need to build our own tree.
@@ -134,13 +154,13 @@ def zenpack2XML(dmd, zp):
             if loc not in root:
                 root[loc] = {}
                 # Graphs don't have their own node
-                if i > 0 and  obj_path[i-1] == 'graphDefs':
-                    graph_path = '/'.join(obj_path[:i+1])
+                if i > 0 and obj_path[i - 1] == "graphDefs":
+                    graph_path = "/".join(obj_path[: i + 1])
                     graph_obj = dmd.getObjByPath(graph_path)
                     add_object(root[loc], graph_obj)
 
                 # Thresholds don't have a container
-                if loc == 'thresholds':
+                if loc == "thresholds":
                     add_object(root[loc], threshie)
 
             root = root[loc]
@@ -150,7 +170,8 @@ def zenpack2XML(dmd, zp):
     # Print out the tree
     print_xml_tree(tree)
 
-    print "</zenpack>"
+    print("</zenpack>")
+
 
 def describeDevClass(obj, tree):
     root = tree
@@ -159,13 +180,13 @@ def describeDevClass(obj, tree):
         if loc not in root:
             root[loc] = {}
             # Graphs don't have their own node
-            if i > 0 and  obj_path[i-1] == 'graphDefs':
-                graph_path = '/'.join(obj_path[:i+1])
+            if i > 0 and obj_path[i - 1] == "graphDefs":
+                graph_path = "/".join(obj_path[: i + 1])
                 graph_obj = dmd.getObjByPath(graph_path)
                 add_object(root[loc], graph_obj)
 
             # Thresholds don't have a container
-            if loc == 'thresholds':
+            if loc == "thresholds":
                 add_object(root[loc], threshie)
 
         root = root[loc]
@@ -173,13 +194,14 @@ def describeDevClass(obj, tree):
 
 
 def getDefaultModelers(dmdObj):
-    defaultDirs = [
-        zenPath('Products', 'DataCollector', 'plugins', 'zenoss'),
-    ]
-    tree = { '':{'zport':{'dmd':{}}}}
+    import Products.DataCollector.plugins.zenoss as _plugins
+
+    defaultDirs = [os.path.dirname(_plugins.__file__)]
+    tree = {"": {"zport": {"dmd": {}}}}
     for dir in defaultDirs:
         modelerSearch(tree, dir)
     print_xml_tree(tree)
+
 
 def processDevClass(dmdObj):
     tree = {}
@@ -188,25 +210,29 @@ def processDevClass(dmdObj):
         describeDevClass(template, tree)
     print_xml_tree(tree)
     for obj in dmdObj.objectValues():
-        if obj.meta_type == 'DeviceClass':
+        if obj.meta_type == "DeviceClass":
             processDevClass(obj)
 
 
 def xml_header():
     export_date = datetime.datetime.now()
-    print """<?xml version="1.0" encoding="UTF-8"?>
+    print(
+        """<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Base Zenoss information generated on %s -->
 <zenbase>
-""" % (export_date) 
+"""
+        % (export_date)
+    )
+
 
 def xml_trailer():
-    print """
+    print("""
 </zenbase>
-"""
+""")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     xml_header()
     dmd = ZenScriptBase(connect=True).dmd
     getDefaultModelers(dmd.Devices)
