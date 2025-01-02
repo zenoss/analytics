@@ -435,7 +435,7 @@ class PopulatedJobStoreTest(TestCase):
     def setUp(t):
         t.store = JobStore(t.layer.redis)
         for jobid, data in t.records.items():
-            t.layer.redis.hmset("zenjobs:job:%s" % jobid, data)
+            t.store[jobid] = data
 
     def tearDown(t):
         del t.store

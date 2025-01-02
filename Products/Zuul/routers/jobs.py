@@ -108,24 +108,24 @@ class JobsRouter(DirectRouter):
             logfile, content, maxLimit = None, None, None
         return {"content": content, "logfile": logfile, "maxLimit": maxLimit}
 
+    _validstates = {
+        "STARTED": "started",
+        "SUCCESS": "finished",
+        "PENDING": "created",
+        "RETRY": "started",
+    }
+
     def userjobs(self):
         results = defaultdict(list)
         totals = {}
-        validstates = {
-            "STARTED": "started",
-            "SUCCESS": "finished",
-            "PENDING": "created",
-            "RETRY": "started",
-        }
-        for job in self.api.getUserJobs():
-            if job.status in validstates:
-                results[job.status].append(job)
+        for job in self.api.getUserJobs(statuses=self._validstates.keys()):
+            results[job.status].append(job)
         # Sort and slice appropriately -- most recent 10 items
         for status, jobs in results.iteritems():
             try:
                 jobs.sort(
-                    key=lambda j: getattr(j, validstates[status]),
-                    reverse=True
+                    key=lambda j: getattr(j, self._validstates[status]),
+                    reverse=True,
                 )
             except Exception as ex:
                 log.warn("Couldn't sort: (%r) %s", ex, ex)

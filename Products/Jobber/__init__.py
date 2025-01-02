@@ -23,7 +23,7 @@ def _patchstate():
     )
     for attr in groupings:
         setattr(states, attr, frozenset({ABORTED} | getattr(states, attr)))
-    setattr(states, "ABORTED", ABORTED)
+    states.ABORTED = ABORTED
 
     # Update the PRECENDENCE stuff to account for ABORTED
     offset = states.PRECEDENCE.index(None)
