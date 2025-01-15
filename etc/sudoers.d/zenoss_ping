@@ -1,3 +1,0 @@
-# Allow privileged execution of ping and ping6
-%zenoss ALL = NOPASSWD: /usr/bin/ping,/usr/bin/ping6
-Defaults:zenoss !requiretty
